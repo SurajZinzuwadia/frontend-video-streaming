@@ -21,11 +21,19 @@ export default function LoginForm() {
   const handleClick = async () => {
     try {
       const response = await axios.post('http://localhost:3001/api/login', { email, password });
-      console.log(response.data);
-      navigate('/dashboard', { replace: true });
+      console.log(response.data)
+      if (response.data.user) {
+        // Store the user data in local storage
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Navigate to the dashboard or desired page after successful login
+        navigate('/dashboard', { replace: true });
+
+      } else {
+        setError('Invalid credentials');
+      }
     } catch (error) {
       console.error(error);
-      setError('Invalid credentials');
+      setError('An error occurred while logging in');
     }
   };
   return (
