@@ -48,8 +48,14 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
+  },
+});
 // Set up multer to handle file uploads
 const upload = multer({ dest: 'uploads/' });
 
@@ -105,7 +111,7 @@ app.post('/stream', upload.single('video'), (req, res) => {
 });
 
 app.get('/video', (req, res) => {
-  const videoPath = path.join(__dirname, '../../../sample-5s.mp4');
+  const videoPath = path.join(__dirname, './testing.mp4');
 
   // Read the video file and send its data to the client
   const readStream = fs.createReadStream(videoPath);
@@ -124,7 +130,7 @@ app.get('/video', (req, res) => {
   });
 });
 
-const port = 5000;
+const port = 5001;
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

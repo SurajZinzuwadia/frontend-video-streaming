@@ -70,12 +70,13 @@ export default function BlogPostCard({ post, index }) {
   const latestPost = index === 1 || index === 2;
   const [toggle, setToggle] = useState(true);
   const [videoChunks, setVideoChunks] = useState([]);
+  const [isVideoView, setIsVideoView] = useState(false);
 
   const videoRef = useRef(null);
 
   const handleClick = () => {
     // Toggle the state when the title is clicked
-    setToggle((prevState) => !prevState);
+    setIsVideoView((prevIsVideoView) => !prevIsVideoView);
   };
 
   const POST_INFO = [
@@ -85,33 +86,39 @@ export default function BlogPostCard({ post, index }) {
   ];
 
   useEffect(() => {
-    const socket = io('http://localhost:5000');
+   
+      // Establish the socket connection when transitioning to video view
+      const socket = io('http://localhost:5001');
 
-    socket.on('connect', () => {
-      console.log('Connected to the server');
+      socket.on('connect', () => {
+        console.log('Connected to the server');
 
-      // Request the static video from the server
-      fetch('http://localhost:5000/video')
-        .then((response) => response.blob())
-        .then((videoBlob) => {
-          const videoURL = URL.createObjectURL(videoBlob);
+        // Request the static video from the server
+        fetch('http://localhost:5001/video')
+          .then((response) => response.blob())
+          .then((videoBlob) => {
+            const videoURL = URL.createObjectURL(videoBlob);
 
-          // Set the video URL to the video player
-          const videoElement = videoRef.current;
-          if (videoElement) {
+            // Set the video URL to the video player
+            const videoElement = videoRef.current;
             videoElement.src = videoURL;
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching video:', error);
-        });
+          })
+          .catch((error) => {
+            console.error('Error fetching video:', error);
+          });
 
-      socket.on('video-chunk', (chunk) => {
-        // Store the video chunk in the state
-        setVideoChunks((prevChunks) => [...prevChunks, chunk]);
+        socket.on('video-chunk', (chunk) => {
+          // Store the video chunk in the state
+          setVideoChunks((prevChunks) => [...prevChunks, chunk]);
+        });
       });
-    });
-  }, [toggle]);
+
+      // Return a cleanup function to disconnect the socket when component unmounts or transitioning to card view
+      return () => {
+        socket.disconnect();
+      };
+    
+  }, [isVideoView]);
 
   useEffect(() => {
     if (videoChunks.length > 0) {
@@ -121,9 +128,7 @@ export default function BlogPostCard({ post, index }) {
 
       // Update the video player source with the concatenated video
       const videoElement = videoRef.current;
-      if (videoElement) {
-        videoElement.src = videoURL;
-      }
+      videoElement.src = videoURL;
     }
   }, [videoChunks]);
 
@@ -234,11 +239,12 @@ export default function BlogPostCard({ post, index }) {
           </>
         ) : (
           <>
-            <StyledVideo ref={videoRef} controls>
-              <source type="video/mp4" />
+            <video ref={videoRef} controls>
+              {/* Add the source and track elements here */}
+              <source src="" type="video/mp4" />
               <track kind="captions" srcLang="en" label="English Captions" />
               Your browser does not support the video tag.
-            </StyledVideo>
+            </video>
           </>
         )}
       </Card>
