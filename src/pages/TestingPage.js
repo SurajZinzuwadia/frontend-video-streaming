@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import io from 'socket.io-client';
-
+import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 
@@ -19,6 +19,7 @@ const SORT_OPTIONS = [
 export default function TestingPage() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [videoChunks, setVideoChunks] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const videoRef = useRef(null);
   const socketRef = useRef(null);
@@ -31,6 +32,18 @@ export default function TestingPage() {
     setIsStreaming(false);
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/users');
+        setUsers(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchUsers();
+  }, []);
   useEffect(() => {
    
     // Establish the socket connection when transitioning to video view
@@ -102,8 +115,8 @@ export default function TestingPage() {
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
         <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <BlogPostCard key={post.id} post={post} index={index} />
+          {users.map((user, index) => (
+            <BlogPostCard key={user._id} user={user} index={index} />
           ))}
         </Grid>
       </Container>

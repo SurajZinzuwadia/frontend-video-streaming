@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-
+import axios from 'axios';
 import PropTypes from 'prop-types';
 // @mui
+import { useNavigate } from 'react-router-dom';
+
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent, Button } from '@mui/material';
 // utils
@@ -66,14 +68,17 @@ BlogPostCard.propTypes = {
   index: PropTypes.number,
 };
 
-export default function BlogPostCard({ post, index }) {
-  const { cover, title, view, comment, share, author, createdAt } = post;
+export default function BlogPostCard({ user, index }) {
+  // const { cover, title, view, comment, share, author, createdAt } = post;
+  // const { cover, title, view, comment, share, author, createdAt } = user;
+
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
   const [videoChunks, setVideoChunks] = useState([]);
   const [isVideoView, setIsVideoView] = useState(false);
 
   const [isStreaming, setIsStreaming] = useState(false);
+  const navigate = useNavigate();
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
@@ -83,6 +88,36 @@ export default function BlogPostCard({ post, index }) {
     setIsStreaming(false);
   };
 
+  const handleSubscribe = async () => {
+    try {
+      const loggedUser = JSON.parse(localStorage.getItem('user'));
+  
+      // Check if the user is logged in
+      if (!loggedUser) {
+        // If not logged in, redirect to the login page
+        navigate('/login');
+        return;
+      }
+  
+      // Make an API call to subscribe to the producer
+      const response = await axios.post(`http://localhost:3001/api/subscriptions/${loggedUser._id}`, {
+        producerId: user._id,
+      });
+  
+      // If the subscription was added successfully, show a success message
+      if (response.data.message === 'Subscription added successfully') {
+        console.log('Successfully subscribed to the producer');
+        // Add any additional logic or UI updates you want to show when the subscription is successful
+      } else {
+        console.log('Failed to subscribe to the producer');
+        // Handle any error or show an error message if the subscription failed
+      }
+    } catch (error) {
+      console.error('An error occurred while subscribing:', error);
+      // Handle any error or show an error message if an error occurred while subscribing
+    }
+  };
+  
   useEffect(() => {
    
     // Establish the socket connection when transitioning to video view
@@ -137,11 +172,11 @@ useEffect(() => {
     setIsVideoView((prevIsVideoView) => !prevIsVideoView);
   };
 
-  const POST_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
-    { number: share, icon: 'eva:share-fill' },
-  ];
+  // const POST_INFO = [
+  //   { number: comment, icon: 'eva:message-circle-fill' },
+  //   { number: view, icon: 'eva:eye-fill' },
+  //   { number: share, icon: 'eva:share-fill' },
+  // ];
 
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
@@ -195,8 +230,10 @@ useEffect(() => {
                 }}
               />
               <StyledAvatar
-                alt={author.name}
-                src={author.avatarUrl}
+                // alt={author.name}
+                // src={author.avatarUrl}
+                alt={user.name}
+                src={user.avatarUrl}
                 sx={{
                   ...((latestPostLarge || latestPost) && {
                     zIndex: 9,
@@ -208,7 +245,9 @@ useEffect(() => {
                 }}
               />
 
-              <StyledCover alt={title} src={cover} />
+              {/* <StyledCover alt={title} src={cover} /> */}
+              <StyledCover alt='cover' src='/assets/images/covers/cover_1.jpg' />
+
             </StyledCardMedia>
             <CardContent
               sx={{
@@ -221,7 +260,8 @@ useEffect(() => {
               }}
             >
               <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
-                {fDate(createdAt)}
+                {/* {fDate(createdAt)} */}
+                Now
               </Typography>
 
               <StyledTitle
@@ -236,7 +276,8 @@ useEffect(() => {
                   }),
                 }}
               >
-                {title}
+                {/* {title} */}
+                Static Title
               </StyledTitle>
 
               {/* <StyledInfo>
@@ -258,7 +299,7 @@ useEffect(() => {
                 ))}
               </StyledInfo> */}
                 <Button 
-                onClick={handleStartStreaming} variant="contained" color="inherit">
+                onClick={handleSubscribe} variant="contained" color="inherit">
                 Subscribe
               </Button>
               <Button 
