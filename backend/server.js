@@ -111,7 +111,7 @@ app.post('/stream', upload.single('video'), (req, res) => {
 });
 
 app.get('/video', (req, res) => {
-  const videoPath = path.join(__dirname, './testing.mp4');
+  const videoPath = path.join(__dirname, './testing1.mp4');
 
   // Read the video file and send its data to the client
   const readStream = fs.createReadStream(videoPath);

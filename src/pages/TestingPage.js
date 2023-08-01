@@ -101,26 +101,11 @@ export default function TestingPage() {
           <BlogPostsSearch posts={POSTS} />
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
-        <div>
-
-          {isStreaming ? (
-            <>
-        <video ref={videoRef} controls width="640" height="360">
-          <source src="" type="video/mp4" />
-          <track kind="captions" srcLang="en" label="English Captions" />
-          Your browser does not support the video tag.
-        </video>
-            <Button onClick={handleStopStreaming} variant="contained" color="error">
-              Stop Streaming
-            </Button>
-            </>
-            
-          ) : (
-            <Button onClick={handleStartStreaming} variant="contained" color="primary">
-              Start Streaming
-            </Button>
-          )}
-        </div>
+        <Grid container spacing={3}>
+          {POSTS.map((post, index) => (
+            <BlogPostCard key={post.id} post={post} index={index} />
+          ))}
+        </Grid>
       </Container>
     </>
   );

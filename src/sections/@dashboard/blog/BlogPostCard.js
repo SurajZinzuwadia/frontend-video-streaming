@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
+import { Box, Link, Card, Grid, Avatar, Typography, CardContent, Button } from '@mui/material';
 // utils
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
@@ -25,6 +25,7 @@ const StyledTitle = styled(Link)({
   WebkitLineClamp: 2,
   display: '-webkit-box',
   WebkitBoxOrient: 'vertical',
+  marginBottom: '16px'
 });
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
@@ -57,6 +58,7 @@ const StyledVideo = styled('video')({
   width: '100%',
   height: '100%',
 });
+
 // ----------------------------------------------------------------------
 
 BlogPostCard.propTypes = {
@@ -68,10 +70,66 @@ export default function BlogPostCard({ post, index }) {
   const { cover, title, view, comment, share, author, createdAt } = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
-  const [toggle, setToggle] = useState(true);
   const [videoChunks, setVideoChunks] = useState([]);
   const [isVideoView, setIsVideoView] = useState(false);
 
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  const handleStartStreaming = () => {
+    setIsStreaming(true);
+  };
+
+  const handleStopStreaming = () => {
+    setIsStreaming(false);
+  };
+
+  useEffect(() => {
+   
+    // Establish the socket connection when transitioning to video view
+    const socket = io('http://localhost:5001');
+
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+
+      // Request the static video from the server
+      fetch('http://localhost:5001/video')
+        .then((response) => response.blob())
+        .then((videoBlob) => {
+          const videoURL = URL.createObjectURL(videoBlob);
+
+          // Set the video URL to the video player
+          const videoElement = videoRef.current;
+          videoElement.src = videoURL;
+        })
+        .catch((error) => {
+          console.error('Error fetching video:', error);
+        });
+
+      socket.on('video-chunk', (chunk) => {
+        // Store the video chunk in the state
+        setVideoChunks((prevChunks) => [...prevChunks, chunk]);
+      });
+    });
+
+    // Return a cleanup function to disconnect the socket when component unmounts or transitioning to card view
+    return () => {
+      socket.disconnect();
+    };
+  
+}, [isStreaming]);
+useEffect(() => {
+  if (videoChunks.length > 0) {
+    // Concatenate and create a Blob from the received video chunks
+    const videoBlob = new Blob(videoChunks, { type: 'video/mp4' });
+    const videoURL = URL.createObjectURL(videoBlob);
+
+    // Update the video player source with the concatenated video
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.src = videoURL;
+    }
+  }
+}, [isStreaming]);
   const videoRef = useRef(null);
 
   const handleClick = () => {
@@ -85,58 +143,23 @@ export default function BlogPostCard({ post, index }) {
     { number: share, icon: 'eva:share-fill' },
   ];
 
-  useEffect(() => {
-   
-      // Establish the socket connection when transitioning to video view
-      const socket = io('http://localhost:5001');
-
-      socket.on('connect', () => {
-        console.log('Connected to the server');
-
-        // Request the static video from the server
-        fetch('http://localhost:5001/video')
-          .then((response) => response.blob())
-          .then((videoBlob) => {
-            const videoURL = URL.createObjectURL(videoBlob);
-
-            // Set the video URL to the video player
-            const videoElement = videoRef.current;
-            videoElement.src = videoURL;
-          })
-          .catch((error) => {
-            console.error('Error fetching video:', error);
-          });
-
-        socket.on('video-chunk', (chunk) => {
-          // Store the video chunk in the state
-          setVideoChunks((prevChunks) => [...prevChunks, chunk]);
-        });
-      });
-
-      // Return a cleanup function to disconnect the socket when component unmounts or transitioning to card view
-      return () => {
-        socket.disconnect();
-      };
-    
-  }, [isVideoView]);
-
-  useEffect(() => {
-    if (videoChunks.length > 0) {
-      // Concatenate and create a Blob from the received video chunks
-      const videoBlob = new Blob(videoChunks, { type: 'video/mp4' });
-      const videoURL = URL.createObjectURL(videoBlob);
-
-      // Update the video player source with the concatenated video
-      const videoElement = videoRef.current;
-      videoElement.src = videoURL;
-    }
-  }, [videoChunks]);
-
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
       <Card sx={{ position: 'relative' }}>
-        {toggle ? (
-          <>
+          {isStreaming ? (
+           <>
+            <video ref={videoRef} width="100%" controls key={index}>
+              <source src="" type="video/mp4" />
+              <track kind="captions" srcLang="en" label="English Captions" />
+              Your browser does not support the video tag.
+            </video>
+            <Button onClick={handleStopStreaming} variant="contained" color="error">
+              Stop Streaming
+              </Button>
+            </>
+            
+          ) : (
+            <>
             <StyledCardMedia
               sx={{
                 ...((latestPostLarge || latestPost) && {
@@ -187,7 +210,6 @@ export default function BlogPostCard({ post, index }) {
 
               <StyledCover alt={title} src={cover} />
             </StyledCardMedia>
-
             <CardContent
               sx={{
                 pt: 4,
@@ -217,7 +239,7 @@ export default function BlogPostCard({ post, index }) {
                 {title}
               </StyledTitle>
 
-              <StyledInfo>
+              {/* <StyledInfo>
                 {POST_INFO.map((info, index) => (
                   <Box
                     key={index}
@@ -234,19 +256,22 @@ export default function BlogPostCard({ post, index }) {
                     <Typography variant="caption">{fShortenNumber(info.number)}</Typography>
                   </Box>
                 ))}
-              </StyledInfo>
+              </StyledInfo> */}
+                <Button 
+                onClick={handleStartStreaming} variant="contained" color="inherit">
+                Subscribe
+              </Button>
+              <Button 
+                onClick={handleStartStreaming} variant="contained" color="primary">
+              Watch Streaming
+              </Button>
+           
             </CardContent>
-          </>
-        ) : (
-          <>
-            <video ref={videoRef} controls>
-              {/* Add the source and track elements here */}
-              <source src="" type="video/mp4" />
-              <track kind="captions" srcLang="en" label="English Captions" />
-              Your browser does not support the video tag.
-            </video>
-          </>
-        )}
+
+            </>
+            
+          )}
+        
       </Card>
     </Grid>
   );
