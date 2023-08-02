@@ -5,6 +5,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image:  krishnap1999/video-streaming-platform/frontend:latest
+    hostname: www.surajzinzuwadia.com
     ports:
       - 3000:3000
     # volumes:
