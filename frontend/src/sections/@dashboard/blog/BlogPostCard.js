@@ -72,7 +72,7 @@ BlogPostCard.propTypes = {
 // Function to connect to the server and start receiving camera feed
 
 
-export default function BlogPostCard({ user, index }) {
+export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   // const { cover, title, view, comment, share, author, createdAt } = post;
   // const { cover, title, view, comment, share, author, createdAt } = user;
     // const { cover, title, videoUrl, user } = videoData;
@@ -139,7 +139,10 @@ export default function BlogPostCard({ user, index }) {
     const url = `https://192.168.2.112:3000/j/${user._id}`;
     window.open(url, "_blank");
   };
+  const handleHightStreaming = () => {
+    setIsStreaming(true);
 
+  };
   const handleStopStreaming = () => {
     setIsStreaming(false);
   };
@@ -232,15 +235,12 @@ export default function BlogPostCard({ user, index }) {
       <Card sx={{ position: 'relative' }}>
           {isStreaming ? (
            <>
-            {/* <video ref={videoRef} width="100%" controls key={index}>
-              <source src="" type="video/mp4" />
-              <track kind="captions" srcLang="en" label="English Captions" />
-              Your browser does not support the video tag.
-            </video> */}
-            <video ref={videoRef} width="100%" controls>
+            <video  width="100%" controls key={index}>
+              <source src={`/${videosrc}`} type="video/mp4" />
               <track kind="captions" srcLang="en" label="English Captions" />
               Your browser does not support the video tag.
             </video>
+            
             
             <Button onClick={handleStopStreaming} variant="contained" color="error">
               Stop Streaming
@@ -345,8 +345,9 @@ export default function BlogPostCard({ user, index }) {
                   Subscribe
                 </Button>
                 <Button 
-                  onClick={handleStartStreaming} variant="contained" color="primary">
-Watch Live                  </Button>
+                  onClick={btnFor === 'h' ? handleHightStreaming: handleStartStreaming} variant="contained" color="primary">
+                    {btnFor === 'h' ? 'Watch Highlight': 'Watch Live'}
+                 </Button>
               </StyledInfo>
 
               

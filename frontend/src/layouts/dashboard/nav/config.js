@@ -23,8 +23,13 @@ const navConfig = [
   // },
  
   {
-    title: 'Video',
+    title: 'Live Streams',
     path: '/dashboard/testing',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'Watch Highlights',
+    path: '/dashboard/highlights',
     icon: icon('ic_lock'),
   },
   {
