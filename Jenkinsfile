@@ -47,6 +47,7 @@ pipeline
                     sh 'docker-compose -f docker-compose.yml up -d'
                 }
             }
+    }
 
         post {
             always {
@@ -59,5 +60,4 @@ pipeline
                 sh 'docker logout'
             }
         }
-    }
 }
