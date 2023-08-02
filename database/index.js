@@ -98,6 +98,32 @@ const subscriptionSchema = new mongoose.Schema({
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
 // ... (The rest of your code remains the same)
 
+const videoSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  videoUrl: {
+    type: String,
+    required: true,
+  },
+  // You can add more fields specific to videos, like title, description, etc.
+  title: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  // ... Add more fields as needed
+});
+
+// Create the Video model
+const Video = mongoose.model('Video', videoSchema);
+
+
+
+
 app.post("/api/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -108,8 +134,14 @@ app.post("/api/signup", async (req, res) => {
       return res.status(409).json({ error: "Email already registered" });
     }
 
-    // Create a new user instance with the provided data
-    const newUser = new User({ name, email, password });
+    const userCount = await User.countDocuments();
+
+    // Increment the avatar number and generate the new avatarUrl
+    const nextAvatarNumber = userCount + 1;
+    const newAvatarUrl = `/assets/images/avatars/avatar_${nextAvatarNumber}.jpg`;
+
+    // Create a new user instance with the provided data and updated avatarUrl
+    const newUser = new User({ name, email, password, avatarUrl: newAvatarUrl });
 
     // Save the new user to the database
     await newUser.save();
@@ -291,8 +323,45 @@ app.get('/api/subscriptions/:producerId', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+// Route to add a new video
+app.post('/api/videos', async (req, res) => {
+  try {
+    const { user, videoUrl, title, description } = req.body;
+
+    // Create a new video object based on the video schema
+    const newVideo = new Video({
+      user, // Assuming you have the user's ID available from the request
+      videoUrl,
+      title,
+      description,
+      // Add more fields as needed
+    });
+
+    // Save the new video to the database
+    const savedVideo = await newVideo.save();
+
+    res.status(201).json({ message: 'Video added successfully', video: savedVideo });
+  } catch (error) {
+    console.error('Error adding video:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+app.get('/api/videos', async (req, res) => {
+  try {
+    const videos = await Video.find(); // Fetch all videos from the database
+    res.status(200).json(videos);
+  } catch (error) {
+    console.error('Error fetching videos:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 connect();
-const port = 3001;
+const port = 8000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
