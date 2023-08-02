@@ -1,5 +1,6 @@
 
-pipeline{
+pipeline
+{
 
 	agent any
 
@@ -7,63 +8,48 @@ pipeline{
 		DOCKERHUB_CREDENTIALS=credentials('vss-docker-key')
 	}
 
-	stages {
-
-		stage('Build') {
+	stages 
+    {
+        stage('Build Frontend') {
             steps {
-                sh 'docker-compose build'
+                dir('frontend') {
+                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
+                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:frontend'
+                }
             }
         }
-
-        // stage('Tag and Push') {
-        //     steps {
-        //         sh 'docker tag krishnap1999/video-streaming-platform/frontend:latest krishnap1999/video-streaming-platform/frontend:1.0'
-        //         sh 'docker tag krishnap1999/video-streaming-platform/backend:latest krishnap1999/video-streaming-platform/backend:1.0'
-        //         sh 'docker tag krishnap1999/video-streaming-platform/nginx:latest krishnap1999/video-streaming-platform/nginx:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/frontend:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/backend:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/nginx:latest:1.0'
-        //     }
-        // }
-
-        // stage('Deploy') {
-        //     steps {
-        //         sh 'docker-compose up -d'
-        //     }
-        // }
-
-		stage('Login') {
+        
+        stage('Build Backend') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'vss-docker-key', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                dir('database') {
+                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
+                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:backend'
                 }
             }
         }
 
-		stage('Push') {
-
-			steps {
-				sh 'docker push krishnap1999/video-streaming-platform:latest'
-			}
-		}
-		stage('Stop and Remove old Container') {
+        stage('push') {
             steps {
-                sh 'docker stop video-streaming-container || true'
-                sh 'docker rm video-streaming-container || true'
+                withCredentials([usernamePassword(credentialsId: 'vss-docker-key', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
+                    sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                    sh 'docker push krishnap1999/video-streaming-platform:frontend'
+                    sh 'docker push krishnap1999/video-streaming-platform:backend'
+                }
             }
         }
-        stage('Run Image') {
 
-			steps {
-				sh 'docker run -d -p 8081:8081 --name video-streaming-container krishnap1999/video-streaming-platform:latest'
-			}
-		}
-	}
+        stage('Deploy') {
+                steps {
+                    sh 'docker-compose -f docker-compose.yaml down'
+                    sh 'docker-compose -f docker-compose.yaml up -d'
+                    sh 'docker-compose ps'
+                }
+            }
+    }
 
-	post {
-		always {
-			sh 'docker logout'
-		}
-	}
-
+        post {
+            always {
+                sh 'docker logout'
+            }
+        }
 }
