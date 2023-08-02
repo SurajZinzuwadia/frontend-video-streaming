@@ -76,7 +76,7 @@
   let myPeer = null;
   function endLive()
   {
-   window.location.href = "https://192.168.2.111:3002" 
+   window.location.href = "https://3.210.49.37:3002" 
   }
   // Function for "Go Live" button
   function goLive() {
@@ -85,7 +85,7 @@
       const socket = io('http://3.210.49.37:8000/')
       //open coonection to peer server
       myPeer = new Peer(undefined, {
-          host: '192.168.2.111',
+          host: '3.210.49.37',
           port: '3001',
           secure: true
           })

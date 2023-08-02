@@ -40,7 +40,7 @@ export default function TestingPage() {
         console.error('Error fetching users:', error);
       }
     
-    const url = `http://localhost:3000/${loggedUser._id}`;
+    const url = `https://3.210.49.37:3000/${loggedUser._id}`;
     window.open(url, "_blank");  };
 
   const handleCloseModal = () => {
@@ -65,11 +65,11 @@ export default function TestingPage() {
       setIsStreaming(true);
 
       // Open connection to Live server
-      const socket = io('wss://192.168.2.111:3000/');
+      const socket = io('wss://3.210.49.37:3000/');
 
       // Open connection to peer server
       const myPeer = new Peer(undefined, {
-        host: '192.168.2.111',
+        host: '3.210.49.37',
         port: '3001',
         secure: true
       });
