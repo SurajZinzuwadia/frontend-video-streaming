@@ -1,5 +1,6 @@
 
-pipeline{
+pipeline
+{
 
 	agent any
 
@@ -7,30 +8,23 @@ pipeline{
 		DOCKERHUB_CREDENTIALS=credentials('vss-docker-key')
 	}
 
-	stages {
-
-		stage('Build') {
+	stages 
+    {
+        stage('Build Frontend') {
             steps {
-                sh 'docker-compose build'
+                dir('frontend') {
+                    sh 'docker build -t krishnap1999/video-streaming-platform/frontend:latest .'
+                }
             }
         }
-
-        // stage('Tag and Push') {
-        //     steps {
-        //         sh 'docker tag krishnap1999/video-streaming-platform/frontend:latest krishnap1999/video-streaming-platform/frontend:1.0'
-        //         sh 'docker tag krishnap1999/video-streaming-platform/backend:latest krishnap1999/video-streaming-platform/backend:1.0'
-        //         sh 'docker tag krishnap1999/video-streaming-platform/nginx:latest krishnap1999/video-streaming-platform/nginx:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/frontend:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/backend:1.0'
-        //         sh 'docker push krishnap1999/video-streaming-platform/nginx:latest:1.0'
-        //     }
-        // }
-
-        // stage('Deploy') {
-        //     steps {
-        //         sh 'docker-compose up -d'
-        //     }
-        // }
+        
+        stage('Build Backend') {
+            steps {
+                dir('database') {
+                    sh 'docker build -t krishnap1999/video-streaming-platform/backend:latest .'
+                }
+            }
+        }
 
 		stage('Login') {
             steps {
@@ -43,27 +37,27 @@ pipeline{
 		stage('Push') {
 
 			steps {
-				sh 'docker push krishnap1999/video-streaming-platform:latest'
+                    sh 'docker push krishnap1999/video-streaming-platform/frontend:latest'
+                    sh 'docker push krishnap1999/video-streaming-platform/backend:latest'
 			}
-		}
-		stage('Stop and Remove old Container') {
-            steps {
-                sh 'docker stop video-streaming-container || true'
-                sh 'docker rm video-streaming-container || true'
+		}	
+
+        stage('Deploy') {
+                steps {
+                    sh 'docker-compose -f docker-compose.yml up -d'
+                }
+            }
+
+        post {
+            always {
+                sh 'docker-compose -f docker-compose.yml down'
             }
         }
-        stage('Run Image') {
 
-			steps {
-				sh 'docker run -d -p 8081:8081 --name video-streaming-container krishnap1999/video-streaming-platform:latest'
-			}
-		}
-	}
-
-	post {
-		always {
-			sh 'docker logout'
-		}
-	}
-
+        post {
+            always {
+                sh 'docker logout'
+            }
+        }
+    }
 }
