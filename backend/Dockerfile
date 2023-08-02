@@ -5,6 +5,7 @@ FROM node:14
 WORKDIR /app
 
 # Copy the package.json and package-lock.json to the container
+COPY package*.json ./
 
 # Install application dependencies
 RUN npm install
@@ -26,6 +27,6 @@ RUN chmod 600 /app/backend/private_decrypted.key
 
 # Expose the port on which your application listens
 EXPOSE 8000
-
+WORKDIR /app/backend
 # Start the Node.js application
 CMD ["npm", "start"]
