@@ -28,7 +28,7 @@ const { v4: uuidV4 } = require('uuid')
 
 
 const { PeerServer } = require('peer');
-const peerServer = PeerServer({ port: 3001, 
+const peerServer = PeerServer({ port: 3002, 
                             path: '/' ,
                             ssl: {
                                 key: privateKey,

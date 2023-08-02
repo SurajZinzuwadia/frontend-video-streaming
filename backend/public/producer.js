@@ -86,7 +86,7 @@
       //open coonection to peer server
       myPeer = new Peer(undefined, {
           host: '3.210.49.37',
-          port: '3001',
+          port: '3002',
           secure: true
           })
       myPeer.on('open', id => {
