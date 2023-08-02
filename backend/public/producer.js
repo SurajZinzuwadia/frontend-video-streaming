@@ -76,7 +76,7 @@
   let myPeer = null;
   function endLive()
   {
-   window.location.href = "https://3.210.49.37:3002" 
+   window.location.href = "https://3.210.49.37:3000" 
   }
   // Function for "Go Live" button
   function goLive() {
