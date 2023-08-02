@@ -14,6 +14,7 @@ services:
       - NODE_ENV=development
     depends_on:
       - backend
+      - database
   backend:
     build:
       context: ./backend
