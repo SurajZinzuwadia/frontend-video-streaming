@@ -35,12 +35,14 @@ export default function TestingPage() {
   const handleOpenModal = async () => {
 
       try {
-        const response = await axios.put(`http://localhost:8000/api/users/${loggedUser._id}`, {isLive :true});
+        const response = await axios.put(`http://3.210.49.37:3001/api/users/${loggedUser._id}`, {isLive :true});
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     
-    const url = `https://192.168.2.111:8000/${loggedUser._id}`;
+    // const url = `https://192.168.2.111:8000/${loggedUser._id}`;
+        const url = `https://3.210.49.37:8000/${loggedUser._id}`;
+
     window.open(url, "_blank");  };
 
   const handleCloseModal = () => {
@@ -143,7 +145,7 @@ export default function TestingPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/users');
+        const response = await axios.get('http://3.210.49.37:3001/api/users');
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -152,7 +154,7 @@ export default function TestingPage() {
     fetchUsers();
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/videos');
+        const response = await axios.get('http://3.210.49.37:3001/api/videos');
         console.log(response.data)
         setVideos(response.data);
       } catch (error) {

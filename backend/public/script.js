@@ -1,4 +1,4 @@
-const socket = io('192.168.2.111:8000/')
+const socket = io('https://3.210.49.37:8000/')
 // socket.emit('join-room', ROOM_ID, 10)
 
 const videoGrid = document.getElementById('video-grid')

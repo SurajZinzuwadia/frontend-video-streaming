@@ -109,7 +109,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/users/${user.user}`);
+        const response = await fetch(`http://3.210.49.37:3001/api/users/${user.user}`);
         if (!response.ok) {
           throw new Error('User not found');
         }
@@ -136,7 +136,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
-    const url = `https://192.168.2.111:8000/j/${user._id}`;
+    const url = `https://https://3.210.49.37:8000/j/${user._id}`;
     window.open(url, "_blank");
   };
   const handleHightStreaming = () => {
@@ -159,7 +159,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
       }
   
       // Make an API call to subscribe to the producer
-      const response = await axios.post(`http://localhost:8000/api/subscriptions/${loggedUser._id}`, {
+      const response = await axios.post(`http://3.210.49.37:3001/api/subscriptions/${loggedUser._id}`, {
         producerId: singleUser._id,
       });
   

@@ -82,7 +82,7 @@
   function goLive() {
       console.log("Go Live button clicked!");
       //open coonection to Live server
-      const socket = io('192.168.2.111:8000/')
+      const socket = io('https://3.210.49.37:8000/')
       //open coonection to peer server
       myPeer = new Peer(undefined, {
           host: '192.168.2.111',
