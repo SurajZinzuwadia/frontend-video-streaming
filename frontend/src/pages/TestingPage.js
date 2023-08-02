@@ -33,21 +33,15 @@ export default function TestingPage() {
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const handleOpenModal = async () => {
-    try {
-      setOpenModal(true);
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
-      // Use the ref setter function to set the stream as the srcObject
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+      try {
+        const response = await axios.put(`http://localhost:8000/api/users/${loggedUser._id}`, {isLive :true});
+      } catch (error) {
+        console.error('Error fetching users:', error);
       }
-      setStream(stream);
-
-    } catch (error) {
-      console.error('Error accessing the camera:', error);
-      // Handle the error here, e.g., show an error message to the user
-    }
-  };
+    
+    const url = `https://192.168.2.112:3000/${loggedUser._id}`;
+    window.open(url, "_blank");  };
 
   const handleCloseModal = () => {
     // Stop the media stream when the modal is closed
@@ -159,6 +153,7 @@ export default function TestingPage() {
     const fetchVideos = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/videos');
+        console.log(response.data)
         setVideos(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -184,7 +179,7 @@ export default function TestingPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Live Broadcast
+            Live Streaming
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenModal}>
             Go Live
@@ -224,11 +219,18 @@ export default function TestingPage() {
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
 
-        <Grid container spacing={3}>
-          {videos.map((video, index) => (
-            <BlogPostCard key={video._id} user={video} index={index} />
+        {/* <Grid container spacing={3}>
+          {users.map((user, index) => (
+            <BlogPostCard key={video._id} user={user} index={index} />
           ))}
+        </Grid> */}
+        <Grid container spacing={3}>
+          {users.filter(user=>user.isLive).map((user, index) => (
+            <BlogPostCard key={user._id} videoData={user} index={index} />
+          ))}
+ 
         </Grid>
+        
       </Container>
     </>
   );

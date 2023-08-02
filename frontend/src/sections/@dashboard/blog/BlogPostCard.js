@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+
+import Peer from 'peerjs';
 import PropTypes from 'prop-types';
 // @mui
 import { useNavigate } from 'react-router-dom';
@@ -67,14 +69,63 @@ BlogPostCard.propTypes = {
   index: PropTypes.number,
 };
 
-export default function BlogPostCard({ user, index }) {
+// Function to connect to the server and start receiving camera feed
+
+
+export default function BlogPostCard({ videoData, index }) {
   // const { cover, title, view, comment, share, author, createdAt } = post;
   // const { cover, title, view, comment, share, author, createdAt } = user;
-    const { cover, title, videoUrl } = user;
+    const { cover, title, videoUrl, user } = videoData;
   // const staticVideoURL = '../../../../public/assets/bunny.mp4';
+  
+  // function connectToServer() {
+  //   console.log("Join Live button clicked!");
+  //   const socket = io('192.168.2.112:3000/')
+  //   const myPeer = new Peer(undefined, {
+  //       host: '192.168.2.112',
+  //       port: '3001',
+  //       secure: true
+  //       })
 
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
+  //   myPeer.on('open', id => {
+  //       socket.emit('JoinLive', loggedUser._id, id);
+  //   })
+  
+  //   myPeer.on('call', call => {
+  //       console.log('streaming');
+  //       // call.answer(stream)
+  //       const video = document.createElement('video');
+  //       call.on('stream', liveStream => {
+  //           video.srcObject = liveStream;
+  //       })
+  //   })
+  // }
+
+  // const latestPostLarge = index === 0;
+  // const latestPost = index === 1 || index === 2;
+  const [singleUser, setSingleUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/users/${user.user}`);
+        if (!response.ok) {
+          throw new Error('User not found');
+        }
+        const data = await response.json();
+        setSingleUser(data.user);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Fetch user error:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [user]);
+  const latestPostLarge = 1;
+  const latestPost = 1;
   const [videoChunks, setVideoChunks] = useState([]);
   const [isVideoView, setIsVideoView] = useState(false);
 
@@ -85,6 +136,8 @@ export default function BlogPostCard({ user, index }) {
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
+    const url = `https://192.168.2.112:3000/j/${user._id}`;
+    window.open(url, "_blank");
   };
 
   const handleStopStreaming = () => {
@@ -104,7 +157,7 @@ export default function BlogPostCard({ user, index }) {
   
       // Make an API call to subscribe to the producer
       const response = await axios.post(`http://localhost:8000/api/subscriptions/${loggedUser._id}`, {
-        producerId: user._id,
+        producerId: singleUser._id,
       });
   
       // If the subscription was added successfully, show a success message
@@ -174,7 +227,6 @@ export default function BlogPostCard({ user, index }) {
     // Toggle the state when the title is clicked
     setIsVideoView((prevIsVideoView) => !prevIsVideoView);
   };
-
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
       <Card sx={{ position: 'relative' }}>
@@ -185,8 +237,7 @@ export default function BlogPostCard({ user, index }) {
               <track kind="captions" srcLang="en" label="English Captions" />
               Your browser does not support the video tag.
             </video> */}
-            <video width="100%" controls key={index}>
-              <source src={`/${videoUrl}`} type="video/mp4" />
+            <video ref={videoRef} width="100%" controls>
               <track kind="captions" srcLang="en" label="English Captions" />
               Your browser does not support the video tag.
             </video>
@@ -199,6 +250,7 @@ export default function BlogPostCard({ user, index }) {
           ) : (
             <>
             <StyledCardMedia
+            key={user._id}
               sx={{
                 ...((latestPostLarge || latestPost) && {
                   pt: 'calc(100% * 4 / 3)',
@@ -257,7 +309,7 @@ export default function BlogPostCard({ user, index }) {
                   }),
                 }}
               >
-                {title}
+                {user.name} - {title}
               </StyledTitle>
               {/* <StyledCover alt={title} src={cover} /> */}
               <StyledCover alt='cover' src='/assets/images/covers/cover_1.jpg' />
@@ -273,11 +325,6 @@ export default function BlogPostCard({ user, index }) {
                 }),
               }}
             >
-              <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
-                {/* {fDate(createdAt)} */}
-                Date Created
-              </Typography>
-
               <StyledTitle
                 color="inherit"
                 variant="subtitle2"
@@ -290,7 +337,7 @@ export default function BlogPostCard({ user, index }) {
                   }),
                 }}
               >
-                {title}
+                 {user.name} - {title}
               </StyledTitle>
               <StyledInfo>
                 <Button 
@@ -299,8 +346,8 @@ export default function BlogPostCard({ user, index }) {
                 </Button>
                 <Button 
                   onClick={handleStartStreaming} variant="contained" color="primary">
-                Watch Streaming
-                </Button>
+                  {user.isLive ? !videoData.isHightlight? 'Watch Live' : 'Watch Highlights':'Watch Highlights'}               
+                  </Button>
               </StyledInfo>
 
               

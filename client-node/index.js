@@ -1,11 +1,17 @@
 const https = require('https');
 const express = require('express')
 const fs = require('fs');
+const app = express();
 const cors = require('cors');
 const path = require('path');
-const app = express()
-var certificate  = fs.readFileSync("/Users/krishnapatel/Desktop/Internship/Frontend-material/StreamSonic/backend/private.crt");
-var privateKey = fs.readFileSync("/Users/krishnapatel/Desktop/Internship/Frontend-material/StreamSonic/backend/private.key");
+var certificate  = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.crt");
+var privateKey = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.key");
+const corsOptions = {
+  origin: ['https://192.168.2.112:3002', 'https://192.168.2.112:3001, https://192.168.2.112:3000'],
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 const server = https.createServer(
   {
       cert: certificate, 
@@ -14,7 +20,8 @@ const server = https.createServer(
   },
   app
 );
-app.use(cors({ origin: 'https://192.168.2.111:3000' })); // Use the cors middleware with your React app's HTTPS URL
+
+const io = require('socket.io')(server)
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 const port = 3002; // Use the port provided by the environment or 3000 as default

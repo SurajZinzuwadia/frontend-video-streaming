@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true, // Set the default value to true for isVerified
   },
+  isLive: {
+    type: Boolean,
+    default: false, // Set the default value to true for isVerified
+  },
   status: {
     type: String,
     enum: ['active', 'banned'],
@@ -114,6 +118,10 @@ const videoSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+  },
+  isHighlight: {
+    type: Boolean,
+    default: true, // Set the default value to true for isVerified
   },
   // ... Add more fields as needed
 });
@@ -216,6 +224,22 @@ app.delete("/api/users/:id", async (req, res) => {
 
 
 
+// Get a user by ID
+app.get("/api/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Delete the user from the database
+    const result = await User.findOne({ _id: userId });
+    console.log(result);
+
+    res.status(200).json({ user: result, message: "User fetched" });
+  } catch (error) {
+    console.error("Delete user error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.put("/api/users/:id", async (req, res) => {
   const userId = req.params.id;
   const updatedUserData = req.body;
@@ -237,6 +261,7 @@ app.put("/api/users/:id", async (req, res) => {
     user.avatarUrl = updatedUserData.avatarUrl || user.avatarUrl;
     user.isVerified = updatedUserData.isVerified !== undefined ? updatedUserData.isVerified : user.isVerified;
     user.status = updatedUserData.status || user.status;
+    user.isLive = updatedUserData.isLive !== undefined ? updatedUserData.isLive : user.isLive;
 
     // Save the updated user to the database
     await user.save();
@@ -349,17 +374,34 @@ app.post('/api/videos', async (req, res) => {
   }
 });
 
-
 app.get('/api/videos', async (req, res) => {
   try {
-    const videos = await Video.find(); // Fetch all videos from the database
-    res.status(200).json(videos);
+    const videos = await Video.find();
+
+    // Fetch an array of user IDs from the 'videos' array
+    const userIds = videos.map(video => video.user);
+
+    // Fetch all users with matching IDs
+    const users = await User.find({ _id: { $in: userIds } });
+
+    // Create a mapping of user IDs to user objects for easy access
+    const userMap = {};
+    users.forEach(user => {
+      userMap[user._id] = user;
+    });
+
+    // Combine user details with the video data
+    const videosWithUser = videos.map(video => ({
+      ...video.toObject(),
+      user: userMap[video.user],
+    }));
+    console.log(videosWithUser);
+    res.status(200).json(videosWithUser);
   } catch (error) {
     console.error('Error fetching videos:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
-
 connect();
 const port = 8000;
 app.listen(port, () => {
