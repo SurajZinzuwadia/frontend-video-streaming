@@ -13,7 +13,8 @@ pipeline
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t krishnap1999/video-streaming-platform/frontend:latest .'
+                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
+                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:frontend'
                 }
             }
         }
@@ -21,7 +22,8 @@ pipeline
         stage('Build Backend') {
             steps {
                 dir('database') {
-                    sh 'docker build -t krishnap1999/video-streaming-platform/backend:latest .'
+                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
+                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:backend'
                 }
             }
         }
@@ -30,8 +32,8 @@ pipeline
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vss-docker-key', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
                     sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
-                    sh 'docker push krishnap1999/video-streaming-platform/frontend:latest'
-                    sh 'docker push krishnap1999/video-streaming-platform/backend:latest'
+                    sh 'docker push krishnap1999/video-streaming-platform:frontend'
+                    sh 'docker push krishnap1999/video-streaming-platform:backend'
                 }
             }
         }
