@@ -72,10 +72,10 @@ BlogPostCard.propTypes = {
 // Function to connect to the server and start receiving camera feed
 
 
-export default function BlogPostCard({ videoData, index }) {
+export default function BlogPostCard({ user, index }) {
   // const { cover, title, view, comment, share, author, createdAt } = post;
   // const { cover, title, view, comment, share, author, createdAt } = user;
-    const { cover, title, videoUrl, user } = videoData;
+    // const { cover, title, videoUrl, user } = videoData;
   // const staticVideoURL = '../../../../public/assets/bunny.mp4';
   
   // function connectToServer() {
@@ -309,7 +309,7 @@ export default function BlogPostCard({ videoData, index }) {
                   }),
                 }}
               >
-                {user.name} - {title}
+                {user.name}'s Live Stream
               </StyledTitle>
               {/* <StyledCover alt={title} src={cover} /> */}
               <StyledCover alt='cover' src='/assets/images/covers/cover_1.jpg' />
@@ -337,7 +337,7 @@ export default function BlogPostCard({ videoData, index }) {
                   }),
                 }}
               >
-                 {user.name} - {title}
+                 {user.name}'s Live Stream
               </StyledTitle>
               <StyledInfo>
                 <Button 
@@ -346,8 +346,7 @@ export default function BlogPostCard({ videoData, index }) {
                 </Button>
                 <Button 
                   onClick={handleStartStreaming} variant="contained" color="primary">
-                  {user.isLive ? !videoData.isHightlight? 'Watch Live' : 'Watch Highlights':'Watch Highlights'}               
-                  </Button>
+Watch Live                  </Button>
               </StyledInfo>
 
               

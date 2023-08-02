@@ -226,7 +226,7 @@ export default function TestingPage() {
         </Grid> */}
         <Grid container spacing={3}>
           {users.filter(user=>user.isLive).map((user, index) => (
-            <BlogPostCard key={user._id} videoData={user} index={index} />
+            <BlogPostCard key={user._id} user={user} index={index} />
           ))}
  
         </Grid>
