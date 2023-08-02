@@ -1,9 +1,9 @@
-const socket = io('192.168.2.112:3000/')
+const socket = io('192.168.2.111:8000/')
 // socket.emit('join-room', ROOM_ID, 10)
 
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
-  host: '192.168.2.112',
+  host: '192.168.2.111',
   port: '3001',
   secure: true
 })

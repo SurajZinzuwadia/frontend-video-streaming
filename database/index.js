@@ -403,7 +403,7 @@ app.get('/api/videos', async (req, res) => {
   }
 });
 connect();
-const port = 8000;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

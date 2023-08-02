@@ -136,7 +136,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
-    const url = `https://192.168.2.112:3000/j/${user._id}`;
+    const url = `https://192.168.2.111:8000/j/${user._id}`;
     window.open(url, "_blank");
   };
   const handleHightStreaming = () => {

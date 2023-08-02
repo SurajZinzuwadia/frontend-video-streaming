@@ -16,12 +16,24 @@ services:
       - backend
   backend:
     build:
-      context: ./database
+      context: ./backend
       dockerfile: Dockerfile
     image: krishnap1999/video-streaming-platform/backend:latest
+    ports:
+      - 8000:8000
+    # volumes:
+    #   - ./database:/app
+    environment:
+      - NODE_ENV=development
+  database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: krishnap1999/video-streaming-platform/database:latest
     ports:
       - 3001:3001
     # volumes:
     #   - ./database:/app
     environment:
       - NODE_ENV=development
+  

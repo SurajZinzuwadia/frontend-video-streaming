@@ -40,7 +40,7 @@ export default function TestingPage() {
         console.error('Error fetching users:', error);
       }
     
-    const url = `https://192.168.2.112:3000/${loggedUser._id}`;
+    const url = `https://192.168.2.111:8000/${loggedUser._id}`;
     window.open(url, "_blank");  };
 
   const handleCloseModal = () => {

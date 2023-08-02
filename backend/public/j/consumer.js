@@ -19,10 +19,10 @@ videoElement.style.width = "100%";
 function connectToServer() {
     console.log("Join Live button clicked!");
     //open coonection to Live server
-    const socket = io('192.168.2.112:3000/')
+    const socket = io('192.168.2.111:8000/')
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
-        host: '192.168.2.112',
+        host: '192.168.2.111',
         port: '3001',
         secure: true
         })

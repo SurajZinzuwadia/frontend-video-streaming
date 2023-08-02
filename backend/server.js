@@ -4,8 +4,8 @@ const fs = require('fs');
 const cors = require('cors');
 
 const app = express()
-var certificate  = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.crt");
-var privateKey = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.key");
+var certificate  = fs.readFileSync("/app/backend/private.crt");
+var privateKey = fs.readFileSync("/app/backend/private.key");
 const corsOptions = {
   origin: ['https://192.168.2.112:3002', 'https://192.168.2.112:3001, https://192.168.2.112:3000'],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -78,4 +78,4 @@ io.on('connection', socket => {
   })
 })
 
-server.listen(3000)
+server.listen(8000)
