@@ -14,6 +14,7 @@ services:
       - NODE_ENV=development
     depends_on:
       - backend
+    network_mode: "host"
   backend:
     build:
       context: ./database
