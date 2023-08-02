@@ -7,7 +7,7 @@ const path = require('path');
 var certificate  = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.crt");
 var privateKey = fs.readFileSync("/Users/darshandave/MAC/sem3/Internship/video_streaming_platform/SSL_Certificates/liveStream_SSL/private.key");
 const corsOptions = {
-  origin: ['https://192.168.2.111:3002', 'https://192.168.2.111:3001, https://https://3.210.49.37:8000'],
+  origin: ['https://192.168.2.111:3002', 'https://192.168.2.111:3001, https://http://3.210.49.37:8000'],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

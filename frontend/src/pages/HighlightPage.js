@@ -41,7 +41,7 @@ export default function TestingPage() {
       }
     
     // const url = `https://192.168.2.111:8000/${loggedUser._id}`;
-        const url = `https://3.210.49.37:8000/${loggedUser._id}`;
+        const url = `http://3.210.49.37:8000/${loggedUser._id}`;
 
     window.open(url, "_blank");  };
 
