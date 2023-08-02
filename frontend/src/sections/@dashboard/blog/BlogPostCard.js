@@ -109,7 +109,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://3.210.49.37:3001/api/users/${user.user}`);
+        const response = await fetch(`https://3.210.49.37:3001/api/users/${user.user}`);
         if (!response.ok) {
           throw new Error('User not found');
         }
@@ -159,7 +159,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
       }
   
       // Make an API call to subscribe to the producer
-      const response = await axios.post(`http://3.210.49.37:3001/api/subscriptions/${loggedUser._id}`, {
+      const response = await axios.post(`https://3.210.49.37:3001/api/subscriptions/${loggedUser._id}`, {
         producerId: singleUser._id,
       });
   

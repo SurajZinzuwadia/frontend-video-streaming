@@ -20,7 +20,7 @@ export default function LoginForm() {
 
   const handleClick = async () => {
     try {
-      const response = await axios.post('http://3.210.49.37:3001/api/login', { email, password });
+      const response = await axios.post('https://3.210.49.37:3001/api/login', { email, password });
       console.log(response.data)
       if (response.data.user) {
         // Store the user data in local storage
