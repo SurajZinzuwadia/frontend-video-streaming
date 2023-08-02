@@ -52,11 +52,6 @@ pipeline
         post {
             always {
                 sh 'docker-compose -f docker-compose.yml down'
-            }
-        }
-
-        post {
-            always {
                 sh 'docker logout'
             }
         }
