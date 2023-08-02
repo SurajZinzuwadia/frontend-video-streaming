@@ -26,21 +26,15 @@ pipeline
             }
         }
 
-		stage('Login') {
+		stage('push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vss-docker-key', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'docker push krishnap1999/video-streaming-platform/frontend:latest'
+                    sh 'docker push krishnap1999/video-streaming-platform/backend:latest'
                 }
             }
         }
-
-		stage('Push') {
-
-			steps {
-                    sh 'docker push krishnap1999/video-streaming-platform/frontend:latest'
-                    sh 'docker push krishnap1999/video-streaming-platform/backend:latest'
-			}
-		}	
 
         stage('Deploy') {
                 steps {
