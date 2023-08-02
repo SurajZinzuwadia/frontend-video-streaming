@@ -25,6 +25,8 @@ services:
     #   - ./database:/app
     environment:
       - NODE_ENV=development
+    depends_on:
+      - database
   database:
     build:
       context: ./database
