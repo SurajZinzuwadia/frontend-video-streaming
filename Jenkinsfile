@@ -29,7 +29,7 @@ pipeline
         stage('push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vss-docker-key', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
-                    sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin < $DOCKERHUB_CREDENTIALS_PSW'
+                    sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
                     sh 'docker push krishnap1999/video-streaming-platform/frontend:latest'
                     sh 'docker push krishnap1999/video-streaming-platform/backend:latest'
                 }
