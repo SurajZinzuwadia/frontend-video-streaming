@@ -9,6 +9,8 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+RUN npm install --save peerjs
+
 # Copy the rest of the application files
 COPY . .
 
