@@ -41,14 +41,14 @@ pipeline
         stage('Deploy') {
                 steps {
                     sh 'pwd'
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    sh 'docker-compose -f docker-compose.yaml up -d'
                 }
             }
     }
 
         post {
             always {
-                sh 'docker-compose -f docker-compose.yml down'
+                sh 'docker-compose -f docker-compose.yaml down'
                 sh 'docker logout'
             }
         }
