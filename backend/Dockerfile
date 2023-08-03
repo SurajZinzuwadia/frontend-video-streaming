@@ -10,7 +10,7 @@ COPY package*.json ./
 # Install application dependencies
 RUN npm install
 RUN npm install peerjs
-
+RUN npm install nodemon
 # Copy your application files to the container
 COPY . ./backend
 
