@@ -22,7 +22,6 @@ app.use(cors(corsOptions));const server = https.createServer(
   app
 );
 const io = require('socket.io')(server)
-io.origins(['https://192.168.2.112:3002','https://192.168.2.112:3000','https://192.168.2.112:3001']);
 const { v4: uuidV4 } = require('uuid')
 
 
