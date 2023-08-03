@@ -19,8 +19,10 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = async () => {
+    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
     try {
-      const response = await axios.post('https://3.210.49.37:3001/api/login', { email, password });
+      const response = await axios.post(`${apiBaseUrl}/api/login`, { email, password });
       console.log(response.data)
       if (response.data.user) {
         // Store the user data in local storage

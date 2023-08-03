@@ -74,6 +74,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -148,7 +151,7 @@ export default function UserPage() {
 
     // Check if user data exists and contains a valid token
     
-      const response = await axios.get(`https://3.210.49.37:3001/api/subscribers/${userData._id}`);
+      const response = await axios.get(`${apiBaseUrl}/api/subscribers/${userData._id}`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);

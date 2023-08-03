@@ -19,6 +19,8 @@ const SORT_OPTIONS = [
 ];
 
 export default function TestingPage() {
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
   const [isStreaming, setIsStreaming] = useState(false);
   const [videoChunks, setVideoChunks] = useState([]);
   const [users, setUsers] = useState([]);
@@ -35,7 +37,7 @@ export default function TestingPage() {
   const handleOpenModal = async () => {
 
       try {
-        const response = await axios.put(`https://3.210.49.37:3001/api/users/${loggedUser._id}`, {isLive :true});
+        const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, {isLive :true});
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -143,7 +145,7 @@ export default function TestingPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://3.210.49.37:3001/api/users');
+        const response = await axios.get(`${apiBaseUrl}/api/users`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -152,7 +154,7 @@ export default function TestingPage() {
     fetchUsers();
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('https://3.210.49.37:3001/api/videos');
+        const response = await axios.get(`${apiBaseUrl}/api/videos`);
         console.log(response.data)
         setVideos(response.data);
       } catch (error) {
