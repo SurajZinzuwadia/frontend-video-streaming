@@ -10,6 +10,9 @@ WORKDIR /app
 # Copy your application files to the container
 COPY . ./backend
 
+# Copy the package.json and package-lock.json to the container
+COPY backend/package*.json ./backend/
+
 # Install application dependencies
 RUN npm install
 RUN npm install peerjs
