@@ -5,14 +5,16 @@ FROM node:14
 WORKDIR /app
 
 # Copy the package.json and package-lock.json to the container
-COPY package*.json ./
+# COPY package*.json ./
+
+# Copy your application files to the container
+COPY . ./backend
 
 # Install application dependencies
 RUN npm install
 RUN npm install peerjs
 RUN npm install nodemon
-# Copy your application files to the container
-COPY . ./backend
+
 
 # Decrypt the private key
 RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
