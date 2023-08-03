@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . ./backend
 
 # Copy the package.json and package-lock.json to the container
-COPY backend/package*.json ./backend/
+COPY package*.json ./backend/
 
 # Install application dependencies
 RUN npm install
