@@ -29,4 +29,4 @@ RUN chmod 600 /app/backend/private_decrypted.key
 EXPOSE 8000
 WORKDIR /app/backend
 # Start the Node.js application
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
