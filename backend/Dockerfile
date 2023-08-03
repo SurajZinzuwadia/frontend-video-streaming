@@ -27,6 +27,7 @@ RUN chmod 600 /app/backend/private_decrypted.key
 
 # Expose the port on which your application listens
 EXPOSE 8000
+
 WORKDIR /app/backend
 # Start the Node.js application
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
