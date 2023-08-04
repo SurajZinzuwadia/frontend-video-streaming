@@ -21,10 +21,10 @@ RUN npm install nodemon
 
 
 # Decrypt the private key
-RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
+# RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
 
 # Set appropriate permissions for the decrypted private key
-RUN chmod 600 /app/backend/private_decrypted.key
+# RUN chmod 600 /app/backend/private_decrypted.key
 
 # Expose the necessary ports
 
