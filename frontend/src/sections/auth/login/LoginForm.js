@@ -20,7 +20,8 @@ export default function LoginForm() {
 
   const handleClick = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-
+    console.log("Hello")
+    console.log(apiBaseUrl)
     try {
       const response = await axios.post(`${apiBaseUrl}/api/login`, { email, password });
       console.log(response.data)
