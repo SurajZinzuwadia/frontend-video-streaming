@@ -18,11 +18,13 @@ let socket;
 // Function to connect to the server and start receiving camera feed
 function connectToServer() {
     console.log("Join Live button clicked!");
+    const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
+
     //open coonection to Live server
-    const socket = io('http://3.210.49.37:8000/')
+    const socket = io(serverUrl)
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
-        host: '3.210.49.37',
+        host: serverUrl,
         port: '3002',
         secure: true
         })

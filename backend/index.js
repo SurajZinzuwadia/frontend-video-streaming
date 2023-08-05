@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-
+const dotenv = require('dotenv');
 const app = express();
 
 const corsOptions = {
@@ -13,6 +13,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+dotenv.config();
 
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);

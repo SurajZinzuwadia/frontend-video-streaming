@@ -139,7 +139,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
-    const url = `https://3.210.49.37:8000/j/${user._id}`;
+    const url = `${apiBaseUrl}/j/${user._id}`;
     window.open(url, "_blank");
   };
   const handleHightStreaming = () => {

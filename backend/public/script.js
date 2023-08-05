@@ -1,9 +1,11 @@
-const socket = io('http://3.210.49.37:8000/')
+const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
+
+const socket = io(serverUrl)
 // socket.emit('join-room', ROOM_ID, 10)
 
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
-  host: '3.210.49.37',
+  host: serverUrl,
   port: '3002',
   secure: true
 })

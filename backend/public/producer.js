@@ -76,16 +76,17 @@
   let myPeer = null;
   function endLive()
   {
-   window.location.href = "https://3.210.49.37:3000" 
+   window.location.href = "https://www.surajzinzuwadia.com" 
   }
   // Function for "Go Live" button
   function goLive() {
       console.log("Go Live button clicked!");
+      const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
       //open coonection to Live server
-      const socket = io('http://3.210.49.37:8000/')
+      const socket = io(serverUrl)
       //open coonection to peer server
       myPeer = new Peer(undefined, {
-          host: '3.210.49.37',
+          host: serverUrl,
           port: '3002',
           secure: true
           })
