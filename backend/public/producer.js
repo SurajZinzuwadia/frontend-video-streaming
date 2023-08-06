@@ -87,9 +87,9 @@ function accessCamera() {
   // Function for "Go Live" button
   function goLive() {
       console.log("Go Live button clicked!");
-      const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
+      // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
       //open coonection to Live server
-      const socket = io(serverUrl)
+      const socket = io('3.210.49.3:8001/')
       //open coonection to peer server
       myPeer = new Peer(undefined, {
           host: '3.210.49.37',
