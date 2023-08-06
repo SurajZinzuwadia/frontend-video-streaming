@@ -22,9 +22,9 @@ RUN npm install peerjs
 RUN npm install nodemon
 RUN npm install fs
 
-VOLUME /app/certs
-COPY /etc/letsencrypt/live/www.surajzinzuwadia.com/cert.pem /app/certs/
-COPY /etc/letsencrypt/live/www.surajzinzuwadia.com/privkey.pem /app/certs/
+# VOLUME /app/certs
+# COPY /etc/letsencrypt/live/www.surajzinzuwadia.com/cert.pem /app/certs/
+# COPY /etc/letsencrypt/live/www.surajzinzuwadia.com/privkey.pem /app/certs/
 
 # Decrypt the private key
 # RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
