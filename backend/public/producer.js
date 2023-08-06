@@ -30,6 +30,7 @@
   goLiveButton.style.borderRadius = "4px";
 
   // Access the user's camera stream
+
   function accessCamera() {
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -38,10 +39,14 @@
         document.body.appendChild(videoElement);
       })
       .catch(function (error) {
-        console.error("Error accessing camera stream:", error);
+        console.log("Error accessing camera stream:", error);
+        // Display more information about the error
+        console.log("Error name:", error.name);
+        console.log("Error message:", error.message);
+        console.log("Error constraint:", error.constraint);
       });
   }
-
+  
 
   // Flip the camera
   function flipCamera() {
