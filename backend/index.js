@@ -38,15 +38,15 @@ const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 
 const { PeerServer } = require('peer');
-// const peerServer = PeerServer({ port: 3001, 
-//   path: '/' ,
-//   ssl: {
-//       key: privateKey,
-//       cert: certificate,
-//       passphrase: 'dexter'
-//     }
-// });
-const peerServer = PeerServer({ port: 3002, path: '/' });
+const peerServer = PeerServer({ port: 3002, 
+  path: '/' ,
+  ssl: {
+      key: privateKey,
+      cert: certificate,
+      passphrase: 'dexter'
+    }
+});
+// const peerServer = PeerServer({ port: 3002, path: '/' });
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
