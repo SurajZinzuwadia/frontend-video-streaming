@@ -15,7 +15,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 dotenv.config();
 
-const server = require('http').createServer(app);
+var certificate  = fs.readFileSync("/app/certs/cert.pem");
+var privateKey = fs.readFileSync("/app/certs/privkey.pem ");
+
+const server = https.createServer(
+  {
+      cert: certificate, 
+      key: privateKey,
+  },
+  app
+);
+// const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 

@@ -24,8 +24,8 @@ services:
     image: krishnap1999/video-streaming-platform/backend:latest
     ports:
       - 8001:8000
-    # volumes:
-    #   - ./database:/app
+    volumes:
+      - ssl_certs_volume:/app/certs
     environment:
       - NODE_ENV=development
     depends_on:
@@ -49,4 +49,7 @@ services:
 networks:
   my_network:
     driver: bridge
-  
+
+volumes:
+  ssl_certs_volume:
+    external: true
