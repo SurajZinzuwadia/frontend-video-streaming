@@ -1,7 +1,12 @@
 const express = require('express');
+const fs = require('fs');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const app = express();
+
+const app = express()
+var certificate  = fs.readFileSync("/app/certs/cert.pem");
+var privateKey = fs.readFileSync("/app/certs/privkey.pem ");
+
 
 const corsOptions = {
   origin: [
@@ -13,10 +18,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-dotenv.config();
-
-var certificate  = fs.readFileSync("/app/certs/cert.pem");
-var privateKey = fs.readFileSync("/app/certs/privkey.pem ");
 
 const server = https.createServer(
   {
@@ -25,6 +26,11 @@ const server = https.createServer(
   },
   app
 );
+
+dotenv.config();
+
+
+
 // const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');

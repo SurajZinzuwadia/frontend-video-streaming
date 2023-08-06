@@ -18,7 +18,7 @@ WORKDIR /app/backend
 RUN npm install
 RUN npm install peerjs
 RUN npm install nodemon
-
+RUN npm install fs
 
 # Decrypt the private key
 # RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
