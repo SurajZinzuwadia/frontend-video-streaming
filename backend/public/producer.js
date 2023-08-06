@@ -30,22 +30,17 @@
   goLiveButton.style.borderRadius = "4px";
 
   // Access the user's camera stream
-function accessCamera() {
-  if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+  function accessCamera() {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(function (stream) {
         videoElement.srcObject = stream;
         document.body.appendChild(videoElement);
-        flipButton.style.display = 'inline-block'; // Show the flip button after successful access
       })
       .catch(function (error) {
         console.error("Error accessing camera stream:", error);
       });
-  } else {
-    console.error('getUserMedia is not supported in this browser.');
   }
-}
 
 
   // Flip the camera
