@@ -42,7 +42,7 @@ export default function TestingPage() {
         console.error('Error fetching users:', error);
       }
     
-    const url = `https://www.surajzinzuwadia.com/backend/${loggedUser._id}`;
+    const url = `${apiBaseUrl}/backend`;
     window.open(url, "_blank");  };
 
   const handleCloseModal = () => {
