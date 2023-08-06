@@ -75,6 +75,7 @@ BlogPostCard.propTypes = {
 export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+  const apiSocketUrl = process.env.REACT_APP_API_SOCKET_URL;
 
   // const { cover, title, view, comment, share, author, createdAt } = post;
   // const { cover, title, view, comment, share, author, createdAt } = user;
@@ -139,7 +140,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const handleStartStreaming = () => {
     setIsStreaming(true);
-    const url = `${apiBaseUrl}/j/${user._id}`;
+    const url = `${apiSocketUrl}/j/${user._id}`;
     window.open(url, "_blank");
   };
   const handleHightStreaming = () => {
