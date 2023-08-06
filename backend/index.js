@@ -4,8 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 const app = express()
-var certificate  = fs.readFileSync("/app/backend/cert.pem");
-var privateKey = fs.readFileSync("/app/backend/privkey.pem ");
+var certificate  = fs.readFileSync("/app/backend/cert.crt");
+var privateKey = fs.readFileSync("/app/backend/privkey.key ");
 
 
 const corsOptions = {
