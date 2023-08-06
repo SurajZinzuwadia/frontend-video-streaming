@@ -4,8 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 const app = express()
-var certificate  = fs.readFileSync("/app/certs/cert.pem");
-var privateKey = fs.readFileSync("/app/certs/privkey.pem ");
+var certificate  = fs.readFileSync("/app/backend/cert.pem");
+var privateKey = fs.readFileSync("/app/backend/privkey.pem ");
 
 
 const corsOptions = {
@@ -21,8 +21,9 @@ app.use(cors(corsOptions));
 
 const server = https.createServer(
   {
-      cert: certificate, 
-      key: privateKey,
+    cert: certificate, 
+    key: privateKey,
+    passphrase: 'dexter'
   },
   app
 );
