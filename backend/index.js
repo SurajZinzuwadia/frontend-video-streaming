@@ -81,8 +81,16 @@ io.on('connection', socket => {
   socket.on('JoinLive', (roomId, userId) => {
     console.log('Live user connected:', roomId, userId);
     socket.join(roomId);
-    socket.to(roomId).broadcast.emit('user-connected', userId);
+    if(!socket.to(roomId))
+    {
+      console.log('socket to this room id does not exist', roomId);
+    }else
+    {
+      socket.to(roomId).broadcast.emit('user-connected', userId);
+
+    }
   });
+  
 });
 
 const port = process.env.PORT || 8001;
