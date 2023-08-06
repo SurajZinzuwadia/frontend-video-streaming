@@ -42,7 +42,9 @@ export default function TestingPage() {
         console.error('Error fetching users:', error);
       }
     
-    const url = `${apiBaseUrl}/backend`;
+    // const url = `${apiBaseUrl}/backend`;
+    const url = `http://localhost:8001`;
+
     window.open(url, "_blank");  };
 
   const handleCloseModal = () => {
