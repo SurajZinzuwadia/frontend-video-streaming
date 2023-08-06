@@ -21,6 +21,7 @@ RUN npm install
 RUN npm install peerjs
 RUN npm install nodemon
 RUN npm install fs
+RUN npm install https
 
 # VOLUME /app/certs
 # COPY /etc/letsencrypt/live/www.surajzinzuwadia.com/cert.pem /app/certs/

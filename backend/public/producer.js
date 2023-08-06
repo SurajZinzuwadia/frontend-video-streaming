@@ -92,7 +92,7 @@ function accessCamera() {
       const socket = io(serverUrl)
       //open coonection to peer server
       myPeer = new Peer(undefined, {
-          host: serverUrl,
+          host: '3.210.49.37',
           port: '3002',
           secure: true
           })

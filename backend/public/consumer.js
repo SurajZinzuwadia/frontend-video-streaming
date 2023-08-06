@@ -24,7 +24,7 @@ function connectToServer() {
     const socket = io(serverUrl)
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
-        host: serverUrl,
+        host: '3.210.49.37',
         port: '3002',
         secure: true
         })

@@ -1,3 +1,4 @@
+const https = require('https');
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
@@ -37,6 +38,14 @@ const io = require('socket.io')(server);
 const { v4: uuidV4 } = require('uuid');
 
 const { PeerServer } = require('peer');
+// const peerServer = PeerServer({ port: 3001, 
+//   path: '/' ,
+//   ssl: {
+//       key: privateKey,
+//       cert: certificate,
+//       passphrase: 'dexter'
+//     }
+// });
 const peerServer = PeerServer({ port: 3002, path: '/' });
 
 app.set('view engine', 'ejs');
