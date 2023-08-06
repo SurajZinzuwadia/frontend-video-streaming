@@ -1,13 +1,13 @@
-// const connectButton = document.getElementById("connectButton");
+const connectButton = document.getElementById("connectButton");
 const videoElement = document.getElementById("videoElement");
 
-// connectButton.textContent = "Join Live";
-// connectButton.style.padding = "10px";
-// connectButton.style.margin = "5px";
-// connectButton.style.backgroundColor = "#4caf50"; 
-// connectButton.style.color = "#ffffff";
-// connectButton.style.border = "none";
-// connectButton.style.borderRadius = "4px"; 
+connectButton.textContent = "Join Live";
+connectButton.style.padding = "10px";
+connectButton.style.margin = "5px";
+connectButton.style.backgroundColor = "#4caf50"; 
+connectButton.style.color = "#ffffff";
+connectButton.style.border = "none";
+connectButton.style.borderRadius = "4px"; 
 
 let socket;
 // videoElement.setAttribute("autoplay", "");
@@ -41,7 +41,7 @@ function connectToServer() {
         })
     })
 }
-connectToServer();
-// connectButton.addEventListener("click", () => {
-//   connectToServer();
-// });
+// connectToServer();
+connectButton.addEventListener("click", () => {
+  connectToServer();
+});
