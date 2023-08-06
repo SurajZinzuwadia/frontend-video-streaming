@@ -81,7 +81,7 @@ io.on('connection', socket => {
   socket.on('JoinLive', (roomId, userId) => {
     console.log('Live user connected:', roomId, userId);
     socket.join(roomId);
-    if(!socket.to(roomId))
+    if(!(socket.to(roomId).broadcast))
     {
       console.log('socket to this room id does not exist', roomId);
     }else
