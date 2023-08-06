@@ -13,6 +13,7 @@ pipeline
         stage('Cleanup') {
             steps {
                 script {
+                    sh 'rm -rf video-streaming-platform video-streaming-platform@tmp'
                     def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
                     if (runningContainers) {
                         sh "docker stop ${runningContainers}"
