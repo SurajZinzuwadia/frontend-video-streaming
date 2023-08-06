@@ -13,9 +13,16 @@ pipeline
         stage('Cleanup') {
             steps {
                 script {
-                    sh "docker stop \$(docker ps -aq)"
-                    sh "docker rm \$(docker ps -aq)"
-                    sh "docker rmi -f \$(docker images -q)"
+                    def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
+                    if (runningContainers) {
+                        sh "docker stop ${runningContainers}"
+                        sh "docker rm ${runningContainers}"
+                    }
+
+                    def imagesToDelete = sh(script: 'docker images -q', returnStdout: true).trim()
+                    if (imagesToDelete) {
+                        sh "docker rmi -f ${imagesToDelete}"
+                    }
                 }
             }
         }
