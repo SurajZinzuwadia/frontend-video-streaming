@@ -86,6 +86,7 @@ io.on('connection', socket => {
       console.log('socket to this room id does not exist', roomId);
     }else
     {
+      console.log("entered into user connected")
       socket.to(roomId).broadcast.emit('user-connected', userId);
 
     }
