@@ -10,6 +10,8 @@ WORKDIR /app
 # Copy your application files to the container
 COPY . ./backend
 
+RUN mkdir -p /app/certs
+
 # Copy the package.json and package-lock.json to the container
 COPY package*.json ./backend/
 
@@ -20,6 +22,8 @@ RUN npm install peerjs
 RUN npm install nodemon
 RUN npm install fs
 
+COPY ~/certificates/cert.pem /app/certs/
+COPY ~/certificates/privkey.pem /app/certs/
 # Decrypt the private key
 # RUN openssl rsa -in /app/backend/private.key -out /app/backend/private_decrypted.key -passin pass:dexter
 
