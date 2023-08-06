@@ -39,7 +39,7 @@ RUN chmod 600 /app/backend/private_decrypted.key
 #RUN npm run build
 
 # Expose the port on which your application listens
-EXPOSE 8000
+EXPOSE 8001
 
 # Start the Node.js application
 CMD ["node", "index.js"]

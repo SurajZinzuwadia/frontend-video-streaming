@@ -68,12 +68,12 @@ export default function TestingPage() {
       setIsStreaming(true);
 
       // Open connection to Live server
-      const socket = io('wss://3.210.49.37:8000/');
+      const socket = io('wss://3.210.49.37:8001/');
 
       // Open connection to peer server
       const myPeer = new Peer(undefined, {
         host: '3.210.49.37',
-        port: '3001',
+        port: '3002',
         secure: true
       });
       myPeer.on('open', (id) => {
