@@ -1,6 +1,8 @@
-const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
+// const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
+// const socket = io(serverUrl)
 
-const socket = io(serverUrl)
+const socket = io('3.210.49.3:8001/')
+
 // socket.emit('join-room', ROOM_ID, 10)
 
 const videoGrid = document.getElementById('video-grid')
