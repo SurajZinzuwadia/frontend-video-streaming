@@ -25,7 +25,8 @@ services:
     ports:
       - 8001:8000
     volumes:
-      - ssl_certs_volume:/app/certs
+      - /etc/letsencrypt/live/surajzinzuwadia.com/cert.pem:/app/certs/cert.pem
+      - /etc/letsencrypt/live/surajzinzuwadia.com/privkey.pem:/app/certs/privkey.pem
     environment:
       - NODE_ENV=development
     depends_on:
