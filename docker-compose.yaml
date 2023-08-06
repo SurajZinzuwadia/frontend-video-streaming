@@ -25,7 +25,7 @@ services:
     ports:
       - 8001:8000
     volumes:
-      - ssl_certs_volume:/app/certs
+      - /root/certificates:/app/certs
     environment:
       - NODE_ENV=development
     depends_on:
