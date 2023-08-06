@@ -1,7 +1,7 @@
 // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
 // const socket = io(serverUrl)
 
-const socket = io('3.210.49.37:8001/')
+const socket = io('3.210.49.37:8000/')
 
 // socket.emit('join-room', ROOM_ID, 10)
 

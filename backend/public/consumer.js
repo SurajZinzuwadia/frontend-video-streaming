@@ -21,7 +21,7 @@ function connectToServer() {
     // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
 
     //open coonection to Live server
-    const socket = io('3.210.49.37:8001/')
+    const socket = io('3.210.49.37:8000/')
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
         host: '3.210.49.37',
