@@ -12,9 +12,9 @@ pipeline
     {
         stage('Cleanup') {
             steps {
-                    sh 'docker stop $(docker ps -aq)'
-                    sh 'docker rm $(docker ps -aq)'
-                    sh 'docker rmi -f $(docker images -q)'
+                sh "docker stop \$(docker ps -aq)"
+                sh "docker rm \$(docker ps -aq)"
+                sh "docker rmi -f \$(docker images -q)"
             }
         }
         stage('Build Frontend') {
