@@ -113,7 +113,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}1/api/users/${user.user}`);
+        const response = await fetch(`${apiBaseUrl}/api/users/${user.user}`);
         if (!response.ok) {
           throw new Error('User not found');
         }

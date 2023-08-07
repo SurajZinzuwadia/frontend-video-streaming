@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -18,19 +19,15 @@ export default function LoginForm() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = async () => {
+  const handleLogin = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-    console.log("Hello")
-    console.log(apiBaseUrl)
     try {
       const response = await axios.post(`${apiBaseUrl}/api/login`, { email, password });
-      console.log(response.data)
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));
         // Navigate to the dashboard or desired page after successful login
         navigate('/dashboard', { replace: true });
-
       } else {
         setError('Invalid credentials');
       }
@@ -69,7 +66,7 @@ export default function LoginForm() {
       </Stack>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <LoadingButton fullWidth size="large" variant="contained" onClick={handleClick}>
+      <LoadingButton fullWidth size="large" variant="contained" onClick={handleLogin}>
         Login
       </LoadingButton>
     </>
