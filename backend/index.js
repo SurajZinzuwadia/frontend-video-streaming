@@ -5,8 +5,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 const app = express()
-var certificate  = fs.readFileSync("/app/backend/private.crt");
-var privateKey = fs.readFileSync("/app/backend/private.key");
+var certificate  = fs.readFileSync("/app/certs/cert.pem");
+var privateKey = fs.readFileSync("/app/certs/privkey.pem");
 
 
 const corsOptions = {
@@ -24,7 +24,6 @@ const server = https.createServer(
   {
     cert: certificate, 
     key: privateKey,
-    passphrase: 'dexter'
   },
   app
 );
@@ -43,7 +42,6 @@ const peerServer = PeerServer({ port: 3002,
   ssl: {
       key: privateKey,
       cert: certificate,
-      passphrase: 'dexter'
     }
 });
 // const peerServer = PeerServer({ port: 3002, path: '/' });

@@ -26,8 +26,10 @@ services:
       - 8001:8001
       - 3002:3002
     volumes:
-      - /etc/letsencrypt/live/surajzinzuwadia.com/cert.pem:/app/certs/cert.pem
-      - /etc/letsencrypt/live/surajzinzuwadia.com/privkey.pem:/app/certs/privkey.pem
+      # - /etc/letsencrypt/live/surajzinzuwadia.com/cert.pem:/app/certs/cert.pem
+      # - /etc/letsencrypt/live/surajzinzuwadia.com/privkey.pem:/app/certs/privkey.pem
+        - ssl_certs_volume:/app/certs/
+
     environment:
       - NODE_ENV=development
     depends_on:
