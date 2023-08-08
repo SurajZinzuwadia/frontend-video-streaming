@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Peer from 'peerjs';
 import PropTypes from 'prop-types';
 // @mui
@@ -126,9 +127,9 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
           throw new Error('User not found');
         }
         const data = await response.json();
-        const isUserSubscribed = loggedUser.subscribed.includes(user?._id);
-
         setSingleUser(data.user);
+        const isUserSubscribed = loggedUser.subscribed.includes(user?._id);
+        console.log(isUserSubscribed)
         setIsSubscribed(isUserSubscribed);
       } catch (error) {
         console.error('Fetch user error:', error);
@@ -178,15 +179,24 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
       // If the subscription was added successfully, show a success message
       if (response.data.message === 'Subscription added successfully') {
         setIsSubscribed(true);
-        console.log('Successfully subscribed to the producer');
-        // Add any additional logic or UI updates you want to show when the subscription is successful
+        toast.success('Successfully subscribed!', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
       } else {
-        console.log('Failed to subscribe to the producer');
-        // Handle any error or show an error message if the subscription failed
+        toast.error('Failed to subscribe. Please try again.', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+
       }
     } catch (error) {
       console.error('An error occurred while subscribing:', error);
-      // Handle any error or show an error message if an error occurred while subscribing
+      const errorMessage =
+        error.response && error.response.data && error.response.data.error
+          ? error.response.data.error
+          : 'An error occurred while subscribing. Please try again later.';
+      toast.error(errorMessage, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
     }
   };
   
@@ -375,6 +385,8 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
           )}
         
       </Card>
+      <ToastContainer />
+
     </Grid>
   );
 }

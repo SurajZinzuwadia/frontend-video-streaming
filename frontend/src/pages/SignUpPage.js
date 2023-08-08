@@ -1,7 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
@@ -11,7 +8,7 @@ import useResponsive from '../hooks/useResponsive';
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
 // sections
-import { LoginForm } from '../sections/auth/login';
+import { SignupForm } from '../sections/auth/login';
 
 // ----------------------------------------------------------------------
 
@@ -43,23 +40,13 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const mdUp = useResponsive('up', 'md');
-  const navigate = useNavigate();
 
-  const handleSignUp = () => {
-    navigate('/signup');
-
-  }
-
-  useEffect(() => {
-    localStorage.clear(); // Clear localStorage
-    sessionStorage.clear(); // Clear sessionStorage
-  }, []);
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Signup </title>
       </Helmet>
 
       <StyledRoot>
@@ -74,27 +61,24 @@ export default function LoginPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+              Hi there
             </Typography>
-            <img src="/assets/illustrations/illustration_login.png" alt="login" />
+            <img src="/assets/illustrations/illustration_login.png" alt="signup" />
           </StyledSection>
         )}
 
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to StreamSonic
+              Sign up to StreamSonic
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 5 }}>
+            <br />
+
+            {/* <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link
-                variant="subtitle2"
-                onClick={handleSignUp}
-              >
-                Get started
-              </Link>
-            </Typography>
+              <Link variant="subtitle2">Get started</Link>
+            </Typography> */}
 
             <Stack direction="row" spacing={2}>
               <Button fullWidth size="large" color="inherit" variant="outlined">
@@ -116,7 +100,7 @@ export default function LoginPage() {
               </Typography>
             </Divider>
 
-            <LoginForm />
+            <SignupForm />
           </StyledContent>
         </Container>
       </StyledRoot>

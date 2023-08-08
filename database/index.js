@@ -212,13 +212,13 @@ app.post("/api/login", async (req, res) => {
 
     // Check if the provided password matches the user's password
     if (user.password !== password) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Email ID or Password is invalid" });
     }
     req.session.user = user;
 
     // Optionally, you can generate and send a JWT token here for user authentication.
 
-    res.status(200).json({ user: user, message: "Login successful" });
+    res.status(200).json({ user, message: "Login successful" });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -313,26 +313,32 @@ app.post('/api/subscriptions/:userId', async (req, res) => {
     const { userId } = req.params;
     // Validate that the producerId and userId are valid ObjectId strings
     if (!mongoose.Types.ObjectId.isValid(producerId) || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: 'Invalid ObjectId' });
+      return res.status(400).json({ error: 'Invalid ObjectId format' });
     }
 
     // Ensure that the producerId is a valid producer
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid User ID' });
+    const producer = await User.findById(producerId);
+
+    if (!user || !producer) {
+      return res.status(400).json({ error: 'Invalid User ID or producer ID' });
     }
 
     // Check if the subscription already exists
     if (user.subscribed.includes(producerId)) {
-      return res.status(400).json({ error: 'Subscription already exists' });
+      return res.status(400).json({ error: 'You are already subscribed to this channel' });
     }
-    
+    if (producer.subscribers.includes(userId)) {
+      return res.status(400).json({ error: 'User is already subscribed to this producer' });
+    }
     user.subscribed.push(producerId);
     await user.save();
+    producer.subscribers.push(userId);
+    await producer.save();
     // Subscription added successfully
     res.status(201).json({ message: 'Subscription added successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error', errorMessage: error.message }); // Return the error message to the client
+    } catch (error) {
+      res.status(500).json({ error: 'Server error', errorMessage: error.message }); // Return the error message to the client
   }
 });
 

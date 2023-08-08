@@ -21,12 +21,6 @@ const navConfig = [
     path: '/dashboard/channel',
     icon: icon('ic_user'),
   },
-  
-  // {
-  //   title: 'product',
-  //   path: '/dashboard/products',
-  //   icon: icon('ic_cart'),
-  // },
  
   {
     title: 'Live Streams',
@@ -43,6 +37,7 @@ const navConfig = [
     path: '/login',
     icon: icon('ic_lock'),
   },
+  // Hide from the navbar
   // {
   //   title: 'Not found',
   //   path: '/404',

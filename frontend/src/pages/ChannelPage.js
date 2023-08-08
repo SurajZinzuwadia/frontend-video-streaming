@@ -1,4 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
@@ -73,9 +75,12 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ChannelPage() {
+export default function ChanelPage() {
 
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
+  const navigate = useNavigate();
+
 
   const [open, setOpen] = useState(null);
 
@@ -116,6 +121,10 @@ export default function ChannelPage() {
     }
     setSelected([]);
   };
+
+  const handleChannel = (id) => {
+    navigate(`/dashboard/channel/${id}`)
+  }
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -181,7 +190,7 @@ export default function ChannelPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Subscribbed Channels
+            Subscribed Channels
           </Typography>
           {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Follower
@@ -215,7 +224,14 @@ export default function ChannelPage() {
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          padding="none"
+                          sx={{
+                            cursor: 'pointer', // Show pointer cursor on hover
+                          }}
+                          onClick={() => handleChannel(_id)}>
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
@@ -224,13 +240,31 @@ export default function ChannelPage() {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{email}</TableCell>
+                        <TableCell 
+                          align="left"
+                          sx={{
+                            cursor: 'pointer', // Show pointer cursor on hover
+                          }}
+                          onClick={() => handleChannel(_id)}  
+                        >{email}</TableCell>
 
                         {/* <TableCell align="left">{password}</TableCell> */}
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell
+                          align="left"
+                          sx={{
+                            cursor: 'pointer', // Show pointer cursor on hover
+                          }}
+                          onClick={() => handleChannel(_id)}
+                        >{isVerified ? 'Yes' : 'No'}</TableCell>
 
-                        <TableCell align="left">
+                        <TableCell 
+                          align="left"
+                          sx={{
+                            cursor: 'pointer', // Show pointer cursor on hover
+                          }}
+                          onClick={() => handleChannel(_id)}
+                        >
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
@@ -307,8 +341,9 @@ export default function ChannelPage() {
         }}
       >
         <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} 
+          />
+          View
         </MenuItem>
 
         <MenuItem sx={{ color: 'error.main' }}>
