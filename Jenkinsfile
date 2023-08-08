@@ -24,7 +24,7 @@ pipeline
                         sh "docker rmi -f ${imagesToDelete}"
                     }
                     sh 'sudo rm -rf /tmp/*'
-                    sh 'docker system prune -a'
+                    sh 'yes | docker system prune -a'
                     sh 'sudo rm -rf /var/lib/jenkins/workspace/video-streaming-platform'
                     sh 'sudo rm -rf /var/lib/jenkins/workspace/video-streaming-platform@tmp'
                 }
