@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
@@ -26,14 +29,27 @@ export default function LoginForm() {
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Display "Login successful" toast
+        toast.success('Login successful!', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
         // Navigate to the dashboard or desired page after successful login
-        navigate('/dashboard', { replace: true });
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 2000); // Delay of 2 seconds (2000 milliseconds)
       } else {
-        setError('Invalid credentials');
+        // Display error toast for unsuccessful login
+        toast.error('Invalid credentials', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
       }
     } catch (error) {
       console.error(error);
       setError('An error occurred while logging in');
+      toast.error(error.response.data.error, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
     }
   };
   return (
@@ -65,10 +81,11 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
       <LoadingButton fullWidth size="large" variant="contained" onClick={handleLogin}>
         Login
       </LoadingButton>
+      <ToastContainer />
     </>
   );
 }

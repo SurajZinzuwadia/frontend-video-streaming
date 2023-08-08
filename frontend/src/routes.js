@@ -25,6 +25,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'subscriber', element: <UserPage /> },
+        { path: 'channel/:id', element: <HighlightPage /> }, // Add ":id" parameter
         { path: 'channel', element: <ChannelPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },

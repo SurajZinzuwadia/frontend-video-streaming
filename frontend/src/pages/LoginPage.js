@@ -1,4 +1,7 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
@@ -42,7 +45,17 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
+  const navigate = useNavigate();
 
+  const handleSignUp = () => {
+    navigate('/signup');
+
+  }
+
+  useEffect(() => {
+    localStorage.clear(); // Clear localStorage
+    sessionStorage.clear(); // Clear sessionStorage
+  }, []);
   return (
     <>
       <Helmet>
@@ -70,12 +83,17 @@ export default function LoginPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Sign in to StreamSonic
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link variant="subtitle2">Get started</Link>
+              <Link
+                variant="subtitle2"
+                onClick={handleSignUp}
+              >
+                Get started
+              </Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>

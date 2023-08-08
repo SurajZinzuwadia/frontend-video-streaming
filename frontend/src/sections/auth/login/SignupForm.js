@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// Toast
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -42,8 +44,11 @@ export default function SignupForm() {
   const handleSignup = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-      if (password !== correctPassword) {
-        setError("Passwords don't match");
+
+      if (password !== correctPassword) { // Check if passwords match
+        toast.error("Passwords do not match", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        }); // Show error toast
         return;
       }
 
@@ -51,14 +56,25 @@ export default function SignupForm() {
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        // Navigate to the dashboard or desired page after successful signup
-        navigate('/dashboard', { replace: true });
+        // Display "Login successful" toast
+        toast.success('Sign Up successful!', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        // Navigate to the dashboard or desired page after successful login
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 2000); // Delay of 2 seconds (2000 milliseconds)
       } else {
-        setError('Signup failed');
+        // Display error toast for unsuccessful login
+        toast.error('Signup failed. Please try again.', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
       }
     } catch (error) {
-      console.error('--->', error.response.data.error);
       setError(error.response.data.error);
+      toast.error(error.response.data.error, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
     }
   };
 
@@ -95,12 +111,13 @@ export default function SignupForm() {
           Forgot password?
         </Link>
       </Stack> */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
 
       <br />
       <LoadingButton fullWidth size="large" variant="contained" onClick={handleSignup}>
         Sign Up
       </LoadingButton>
+      <ToastContainer />
     </>
   );
 }
