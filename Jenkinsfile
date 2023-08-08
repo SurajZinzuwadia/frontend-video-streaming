@@ -25,7 +25,7 @@ pipeline
                     }
                     sh 'rm -rf /tmp/*'
                     sh 'docker system prune -a'
-                    sh 'rm -rf /var/lib/jenkins/workspace/video-streaming-platform /var/lib/jenkins/workspac/video-streaming-platform\@tmp/'
+                    sh 'rm -rf /var/lib/jenkins/workspace/video-streaming-platform /var/lib/jenkins/workspac/video-streaming-platform@tmp'
                 }
             }
         }
