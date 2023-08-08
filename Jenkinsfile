@@ -23,8 +23,8 @@ pipeline
                     if (imagesToDelete) {
                         sh "docker rmi -f ${imagesToDelete}"
                     }
-                    sh 'rm -rf /tmp/*'
-                    sh 'docker system prune -a'
+                    sh 'sudo rm -rf /tmp/*'
+                    sh 'sudo docker system prune -a'
                 }
             }
         }
