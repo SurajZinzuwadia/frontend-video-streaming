@@ -57,10 +57,11 @@ const StyledCover = styled('img')({
 });
 
 const StyledVideo = styled('video')({
-  top: 0,
   width: '100%',
   height: '100%',
+  position: 'relative',
 });
+
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ BlogPostCard.propTypes = {
 
 
 export default function BlogPostCard({ user, index, btnFor, videosrc }) {
+  const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
   const apiSocketUrl = process.env.REACT_APP_API_SOCKET_URL;
@@ -108,21 +110,28 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   // const latestPostLarge = index === 0;
   // const latestPost = index === 1 || index === 2;
   const [singleUser, setSingleUser] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
+      const loggedUser = JSON.parse(localStorage.getItem('user'));
+      if (!loggedUser) {
+        // If not logged in, redirect to the login page
+        navigate('/login');
+        return;
+      }
       try {
-        const response = await fetch(`${apiBaseUrl}/api/users/${user.user}`);
+        const response = await fetch(`${apiBaseUrl}/api/users/${user?._id}`);
         if (!response.ok) {
           throw new Error('User not found');
         }
         const data = await response.json();
+        const isUserSubscribed = loggedUser.subscribed.includes(user?._id);
+
         setSingleUser(data.user);
-        setIsLoading(false);
+        setIsSubscribed(isUserSubscribed);
       } catch (error) {
         console.error('Fetch user error:', error);
-        setIsLoading(false);
       }
     };
 
@@ -153,7 +162,6 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
 
   const handleSubscribe = async () => {
     try {
-      const loggedUser = JSON.parse(localStorage.getItem('user'));
   
       // Check if the user is logged in
       if (!loggedUser) {
@@ -161,7 +169,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
         navigate('/login');
         return;
       }
-  
+
       // Make an API call to subscribe to the producer
       const response = await axios.post(`${apiBaseUrl}/api/subscriptions/${loggedUser._id}`, {
         producerId: singleUser._id,
@@ -169,6 +177,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   
       // If the subscription was added successfully, show a success message
       if (response.data.message === 'Subscription added successfully') {
+        setIsSubscribed(true);
         console.log('Successfully subscribed to the producer');
         // Add any additional logic or UI updates you want to show when the subscription is successful
       } else {
@@ -238,144 +247,129 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
       <Card sx={{ position: 'relative' }}>
           {isStreaming ? (
-           <>
-            <video  width="100%" controls key={index}>
+            <>
+
+            <StyledVideo  controls key={index}>
               <source src={`/${videosrc}`} type="video/mp4" />
               <track kind="captions" srcLang="en" label="English Captions" />
               Your browser does not support the video tag.
-            </video>
+            </StyledVideo>
             
             
             <Button onClick={handleStopStreaming} variant="contained" color="error">
               Stop Streaming
             </Button>
+
+         
           </>
-            
           ) : (
             <>
-            <StyledCardMedia
-            key={user._id}
-              sx={{
-                ...((latestPostLarge || latestPost) && {
-                  pt: 'calc(100% * 4 / 3)',
-                  '&:after': {
-                    top: 0,
-                    content: "''",
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
-                  },
-                }),
-                ...(latestPostLarge && {
-                  pt: {
-                    xs: 'calc(100% * 4 / 3)',
-                    sm: 'calc(100% * 3 / 4.66)',
-                  },
-                }),
-              }}
-            >
-              <SvgColor
-                color="paper"
-                src="/assets/icons/shape-avatar.svg"
-                sx={{
-                  width: 80,
-                  height: 36,
-                  zIndex: 9,
-                  bottom: -15,
-                  position: 'absolute',
-                  color: 'background.paper',
-                  ...((latestPostLarge || latestPost) && { display: 'none' }),
-                }}
-              />
-              <StyledAvatar
-                alt={user.name}
-                src={user.avatarUrl}
+              <StyledCardMedia
+              key={user._id}
                 sx={{
                   ...((latestPostLarge || latestPost) && {
+                    pt: 'calc(100% * 4 / 3)',
+                    '&:after': {
+                      top: 0,
+                      content: "''",
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                    },
+                  }),
+                  ...(latestPostLarge && {
+                    pt: {
+                      xs: 'calc(100% * 4 / 3)',
+                      sm: 'calc(100% * 3 / 4.66)',
+                    },
+                  }),
+                }}
+              >
+                <SvgColor
+                  color="paper"
+                  src="/assets/icons/shape-avatar.svg"
+                  sx={{
+                    width: 80,
+                    height: 36,
                     zIndex: 9,
-                    top: 24,
-                    left: 24,
-                    width: 40,
-                    height: 40,
-                  }),
-                }}
-              />
-              <StyledTitle
-                color="inherit"
-                variant="subtitle2"
-                underline="hover"
-                onClick={handleClick}
+                    bottom: -15,
+                    position: 'absolute',
+                    color: 'background.paper',
+                    ...((latestPostLarge || latestPost) && { display: 'none' }),
+                  }}
+                />
+                <StyledAvatar
+                  alt={user.name}
+                  src={user.avatarUrl}
+                  sx={{
+                    ...((latestPostLarge || latestPost) && {
+                      zIndex: 9,
+                      top: 24,
+                      left: 24,
+                      width: 40,
+                      height: 40,
+                    }),
+                  }}
+                />
+                <StyledTitle
+                  color="inherit"
+                  variant="subtitle2"
+                  underline="hover"
+                  onClick={handleClick}
+                  sx={{
+                    ...(latestPostLarge && { typography: 'h5', height: 60 }),
+                    ...((latestPostLarge || latestPost) && {
+                      color: 'common.white',
+                    }),
+                  }}
+                >
+                  {user.name}'s Live Stream
+                </StyledTitle>
+                {/* <StyledCover alt={title} src={cover} /> */}
+                <StyledCover alt='cover' src={`/assets/images/covers/cover_${index+1}.jpg`} />
+
+              </StyledCardMedia>
+              <CardContent
                 sx={{
-                  ...(latestPostLarge && { typography: 'h5', height: 60 }),
+                  pt: 4,
                   ...((latestPostLarge || latestPost) && {
-                    color: 'common.white',
+                    bottom: 0,
+                    width: '100%',
+                    position: 'absolute',
                   }),
                 }}
               >
-                {user.name}'s Live Stream
-              </StyledTitle>
-              {/* <StyledCover alt={title} src={cover} /> */}
-              <StyledCover alt='cover' src='/assets/images/covers/cover_1.jpg' />
-
-            </StyledCardMedia>
-            <CardContent
-              sx={{
-                pt: 4,
-                ...((latestPostLarge || latestPost) && {
-                  bottom: 0,
-                  width: '100%',
-                  position: 'absolute',
-                }),
-              }}
-            >
-              <StyledTitle
-                color="inherit"
-                variant="subtitle2"
-                underline="hover"
-                onClick={handleClick}
-                sx={{
-                  ...(latestPostLarge && { typography: 'h5', height: 60 }),
-                  ...((latestPostLarge || latestPost) && {
-                    color: 'common.white',
-                  }),
-                }}
-              >
-                 {user.name}'s Live Stream
-              </StyledTitle>
-              <StyledInfo>
-                <Button 
-                  onClick={handleSubscribe} variant="contained" color="inherit">
-                  Subscribe
-                </Button>
-                <Button 
-                  onClick={btnFor === 'h' ? handleHightStreaming: handleStartStreaming} variant="contained" color="primary">
-                    {btnFor === 'h' ? 'Watch Highlight': 'Watch Live'}
-                 </Button>
-              </StyledInfo>
-
-              
-              {/* <StyledInfo>
-                {POST_INFO.map((info, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      ml: index === 0 ? 0 : 1.5,
-                      ...((latestPostLarge || latestPost) && {
-                        color: 'grey.500',
-                      }),
-                    }}
-                  >
-                    <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />
-                    <Typography variant="caption">{fShortenNumber(info.number)}</Typography>
-                  </Box>
-                ))}
-              </StyledInfo> */}
-               
-            </CardContent>
-
+                <StyledTitle
+                  color="inherit"
+                  variant="subtitle2"
+                  underline="hover"
+                  onClick={handleClick}
+                  sx={{
+                    ...(latestPostLarge && { typography: 'h5', height: 60 }),
+                    ...((latestPostLarge || latestPost) && {
+                      color: 'common.white',
+                    }),
+                  }}
+                >
+                  {btnFor === 'h' ? `${user.name }'s Hightlight`: `${user.name}'s Live Stream`}
+                </StyledTitle>
+                <StyledInfo>
+                  {isSubscribed ? (
+                    <Button variant="contained" color="inherit" disabled>
+                      Subscribed
+                    </Button>
+                  ) : (
+                    <Button onClick={handleSubscribe} variant="contained" color="inherit">
+                      Subscribe
+                    </Button>
+                  )}
+                  <Button 
+                    onClick={btnFor === 'h' ? handleHightStreaming: handleStartStreaming} variant="contained" color="primary">
+                      {btnFor === 'h' ? 'Watch Highlight': 'Watch Live'}
+                  </Button>
+                </StyledInfo>
+              </CardContent>
             </>
             
           )}

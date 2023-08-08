@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function ChannelPage() {
 
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -92,6 +92,7 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [users, setUsers] = useState([]); // State to store the list of users
+
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -151,7 +152,7 @@ export default function UserPage() {
 
     // Check if user data exists and contains a valid token
     
-      const response = await axios.get(`${apiBaseUrl}/api/subscribers/${userData._id}`);
+      const response = await axios.get(`${apiBaseUrl}/api/channels/${userData._id}`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -180,11 +181,11 @@ export default function UserPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Subscriber
+            Subscribbed Channels
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Subscriber
-          </Button>
+          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Follower
+          </Button> */}
         </Stack>
 
         <Card>

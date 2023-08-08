@@ -317,25 +317,18 @@ app.post('/api/subscriptions/:userId', async (req, res) => {
     }
 
     // Ensure that the producerId is a valid producer
-    const producer = await User.findById(producerId);
     const user = await User.findById(userId);
-    if (!user || !producer) {
-      return res.status(400).json({ error: 'Invalid User ID or producer ID' });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid User ID' });
     }
 
     // Check if the subscription already exists
     if (user.subscribed.includes(producerId)) {
       return res.status(400).json({ error: 'Subscription already exists' });
     }
-
-    if (producer.subscribers.includes(userId)) {
-      return res.status(400).json({ error: 'Subscriber already exists' });
-    }
     
     user.subscribed.push(producerId);
     await user.save();
-    producer.subscribers.push(userId);
-    await producer.save();
     // Subscription added successfully
     res.status(201).json({ message: 'Subscription added successfully' });
   } catch (error) {
@@ -360,6 +353,20 @@ app.get('/api/subscribers/:userId', async (req, res) => {
   }
 });
 
+app.get('/api/channels/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find the subscriber in the User collection
+    const user = await User.findById(userId).populate('subscribed'); // Populate the 'subscribers' field with selected fields
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid user ID.' });
+    }
+    res.status(200).json(user.subscribed);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 app.get('/api/subscriptions/:producerId', async (req, res) => {
   try {

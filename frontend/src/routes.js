@@ -11,6 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import TestingPage from './pages/TestingPage';
 import HighlightPage from './pages/HighlightPage';
+import ChannelPage from './pages/ChannelPage';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,8 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'subscriber', element: <UserPage /> },
+        { path: 'channel', element: <ChannelPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'testing', element: <TestingPage /> },

@@ -13,12 +13,12 @@ const navConfig = [
   },
   {
     title: 'subscriber',
-    path: '/dashboard/user',
+    path: '/dashboard/subscriber',
     icon: icon('ic_user'),
   },
   {
-    title: 'Channels',
-    path: '/dashboard/user',
+    title: 'channel',
+    path: '/dashboard/channel',
     icon: icon('ic_user'),
   },
   
