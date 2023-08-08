@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
-import account from '../../../_mock/account';
+import account, {updateAccountData} from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
 
@@ -26,15 +28,42 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+  const [userAccount, setAccountName] = useState({ ...account }); // Assuming you already have the initial account data from the _mock/account
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  
+  const handleClose = async () => {
     setOpen(null);
+      try {
+      // Make an API call to log out the user
+      await axios.post(`${apiBaseUrl}/api/logout`);
+      // Remove the user data from local storage upon logout (optional)
+      localStorage.removeItem("user");
+      // Redirect the user to the login page after successful logout
+      window.location.href = "/login";
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
   };
 
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      setAccountName({
+        displayName: userData.name || 'Guest',
+        email: userData.email || 'demo@minimals.cc',
+        photoURL: userData.avatarUrl || '/assets/images/avatars/avatar_default.jpg',
+        role: userData.role || 'Guest', // You may need to adjust this based on your user data structure
+      });
+    } else {
+      // If user data not found, reset to default account data
+      setAccountName({ ...account });
+    }
+  }, [open]);
   return (
     <>
       <IconButton
@@ -54,7 +83,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={userAccount.photoURL} alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -78,10 +107,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {userAccount.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {userAccount.email}
           </Typography>
         </Box>
 

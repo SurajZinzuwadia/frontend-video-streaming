@@ -82,7 +82,17 @@
   let myPeer = null;
   function endLive()
   {
-   window.location.href = "https://www.surajzinzuwadia.com" 
+
+   let keys = Object.keys(peers)
+   for(var i =0; i < keys.length; i++)
+   {
+    if (peers[keys[i]]) peers[keys[i]].close()
+   }
+   if(socket)
+    socket.emit('disconnect')
+  
+  window.location.href = "https://www.surajzinzuwadia.com";
+  
   }
   // Function for "Go Live" button
   function goLive() {

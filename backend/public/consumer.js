@@ -8,8 +8,9 @@ connectButton.style.backgroundColor = "#4caf50";
 connectButton.style.color = "#ffffff";
 connectButton.style.border = "none";
 connectButton.style.borderRadius = "4px"; 
-
+let bConnected = false;
 let socket;
+let callSocket;
 // videoElement.setAttribute("autoplay", "");
 // videoElement.setAttribute("playsinline", "");
 // videoElement.style.transform = "scaleX(-1)"; 
@@ -17,11 +18,14 @@ let socket;
 
 // Function to connect to the server and start receiving camera feed
 function connectToServer() {
+    let socket;
+    if(!bConnected)
+    {
     console.log("Join Live button clicked!");
     // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
 
-    //open coonection to Live server
-    const socket = io('3.210.49.37:8001/')
+    //open conection to Live server
+    socket = io('3.210.49.37:8001/')
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
         host: '3.210.49.37',
@@ -30,18 +34,39 @@ function connectToServer() {
         })
     myPeer.on('open', id => {
         socket.emit('JoinLive', ROOM_ID, id);
+        socket.on('user-disconnected', id => {
+                if(ROOM_ID == id)
+                {
+                    if(callSocket)callSocket.close();
+                    if(socket)socket.emit('disconnect')
+                    window.location.href = "https://www.surajzinzuwadia.com";
+                }
+            }) 
         })
 
     myPeer.on('call', call => {
         console.log('streaming')
+        callSocket = call;
         call.answer(null)
         const video = document.createElement('video')
         call.on('stream', liveStream => {
             videoElement.srcObject = liveStream;
         })
     })
+    } else { // disconnected clicked by consumer
+        if(socket)
+        {
+            socket.emit('disconnect')
+        }
+        window.location.href = "https://www.surajzinzuwadia.com";
+    }
 }
 // connectToServer();
 connectButton.addEventListener("click", () => {
+    if(bConnected){
+        connectButton.textContent = "End Stream";      
+    }else{
+        connectButton.textContent = "Join Stream";      
+    }
   connectToServer();
 });

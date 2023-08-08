@@ -223,11 +223,6 @@ export default function TestingPage() {
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
 
-        {/* <Grid container spacing={3}>
-          {users.map((user, index) => (
-            <BlogPostCard key={video._id} user={user} index={index} />
-          ))}
-        </Grid> */}
         <Grid container spacing={3}>
           {users.filter(user=>user.isLive).map((user, index) => (
             <BlogPostCard key={user._id} user={user} index={index} />

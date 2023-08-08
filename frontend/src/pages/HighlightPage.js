@@ -156,7 +156,6 @@ export default function TestingPage() {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(`${apiBaseUrl}/api/videos`);
-        console.log(response.data)
         setVideos(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -169,7 +168,6 @@ export default function TestingPage() {
     if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
     }
-    console.log(videoRef)
   }, [stream]);
 
   return (
@@ -184,9 +182,9 @@ export default function TestingPage() {
           <Typography variant="h4" gutterBottom>
             Live Streaming
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenModal}>
+          {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenModal}>
             Go Live
-          </Button>
+          </Button> */}
 
           {/* Modal */}
           <Dialog open={openModal} onClose={handleCloseModal}>

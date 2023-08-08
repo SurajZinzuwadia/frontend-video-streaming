@@ -1,8 +1,10 @@
 // require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
-const app = express();
+const session = require('express-session');
 const cors = require('cors');
+
+const app = express();
 
 // const bodyParser = require("body-parser");
 // const cors = require("cors");
@@ -10,13 +12,21 @@ const pass = "SmitPatel";
 const dbUrl =
   "mongodb+srv://chintupatel61098:ImjCIEj6kWn6LibQ@nodedemo.y4to5j5.mongodb.net/StreamAuth?retryWrites=true&w=majority";
 // "mongodb+srv://chintupatel61098@gmail.com:SmitPatel@nodedemo.y4to5j5.mongodb.net";
+
+app.use(
+  session({
+    secret: 'supersecretkey',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 86400000, // Set the session expiry time to 1 day in milliseconds (24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    },
+  })
+);
+
 app.use(cors());
 app.use(express.json());
-// app.use(cors());
-// const connectionParams = {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// };
+
 // MongoDB setup using Mongoos
 async function connect() {
   try {
@@ -24,12 +34,23 @@ async function connect() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("connected");
+    console.log("connected to the server");
   } catch (error) {
-    console.log(error);
+    console.log("Error while connecting with the databse", error);
   }
 }
 
+
+const requireAuth = (req, res, next) => {
+  // Check if the user is logged in by verifying the session data
+  if (req.session.user) {
+    // User is logged in, continue with the request
+    next();
+  } else {
+    // User is not logged in, return an error response
+    res.status(401).json({ error: 'Authentication required' });
+  }
+};
 // Schema for Users
 const userSchema = new mongoose.Schema({
   name: {
@@ -55,7 +76,7 @@ const userSchema = new mongoose.Schema({
   },
   isLive: {
     type: Boolean,
-    default: false, // Set the default value to true for isVerified
+    default: false, // Set the default value to true for isLive
   },
   status: {
     type: String,
@@ -98,9 +119,7 @@ const subscriptionSchema = new mongoose.Schema({
     ref: 'User',
   }],
 });
-
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
-// ... (The rest of your code remains the same)
 
 const videoSchema = new mongoose.Schema({
   user: {
@@ -125,10 +144,8 @@ const videoSchema = new mongoose.Schema({
   },
   // ... Add more fields as needed
 });
-
 // Create the Video model
 const Video = mongoose.model('Video', videoSchema);
-
 
 
 
@@ -175,6 +192,11 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
+app.get("/api/session-data", (req, res) => {
+  // Retrieve the user data from the session and send it back in the response
+  const userData = req.session.user;
+  res.status(200).json(userData);
+});
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
@@ -192,6 +214,7 @@ app.post("/api/login", async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
+    req.session.user = user;
 
     // Optionally, you can generate and send a JWT token here for user authentication.
 
@@ -202,8 +225,20 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.post("/api/logout", (req, res) => {
+  // Destroy the user session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout error:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    // Send a success message upon successful logout
+    res.status(200).json({ message: "Logout successful" });
+  });
+});
+
 // Delete a user by ID
-app.delete("/api/users/:id", async (req, res) => {
+app.delete("/api/users/:id", requireAuth, async (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -222,8 +257,6 @@ app.delete("/api/users/:id", async (req, res) => {
   }
 });
 
-
-
 // Get a user by ID
 app.get("/api/users/:id", async (req, res) => {
   const userId = req.params.id;
@@ -240,7 +273,7 @@ app.get("/api/users/:id", async (req, res) => {
   }
 });
 
-app.put("/api/users/:id", async (req, res) => {
+app.put("/api/users/:id", requireAuth, async (req, res) => {
   const userId = req.params.id;
   const updatedUserData = req.body;
 
@@ -284,25 +317,18 @@ app.post('/api/subscriptions/:userId', async (req, res) => {
     }
 
     // Ensure that the producerId is a valid producer
-    const producer = await User.findById(producerId);
     const user = await User.findById(userId);
-    if (!user || !producer) {
-      return res.status(400).json({ error: 'Invalid User ID or producer ID' });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid User ID' });
     }
 
     // Check if the subscription already exists
     if (user.subscribed.includes(producerId)) {
       return res.status(400).json({ error: 'Subscription already exists' });
     }
-
-    if (producer.subscribers.includes(userId)) {
-      return res.status(400).json({ error: 'Subscriber already exists' });
-    }
     
     user.subscribed.push(producerId);
     await user.save();
-    producer.subscribers.push(userId);
-    await producer.save();
     // Subscription added successfully
     res.status(201).json({ message: 'Subscription added successfully' });
   } catch (error) {
@@ -310,10 +336,7 @@ app.post('/api/subscriptions/:userId', async (req, res) => {
   }
 });
 
-// Assuming you have already defined the User and Subscription models and have connected to the MongoDB database
 
-// GET all producers from subscriberId
-// GET all producers from subscriberId
 app.get('/api/subscribers/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -330,6 +353,20 @@ app.get('/api/subscribers/:userId', async (req, res) => {
   }
 });
 
+app.get('/api/channels/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find the subscriber in the User collection
+    const user = await User.findById(userId).populate('subscribed'); // Populate the 'subscribers' field with selected fields
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid user ID.' });
+    }
+    res.status(200).json(user.subscribed);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 app.get('/api/subscriptions/:producerId', async (req, res) => {
   try {
@@ -351,7 +388,7 @@ app.get('/api/subscriptions/:producerId', async (req, res) => {
 
 
 // Route to add a new video
-app.post('/api/videos', async (req, res) => {
+app.post('/api/videos', requireAuth, async (req, res) => {
   try {
     const { user, videoUrl, title, description } = req.body;
 
@@ -403,6 +440,7 @@ app.get('/api/videos', async (req, res) => {
   }
 });
 connect();
+
 const port = 3001;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

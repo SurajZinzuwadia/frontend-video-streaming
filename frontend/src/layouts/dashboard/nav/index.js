@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
@@ -36,7 +36,7 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
-
+  const [userAccount, setAccountName] = useState({...account});
   const isDesktop = useResponsive('up', 'lg');
 
   useEffect(() => {
@@ -46,6 +46,19 @@ export default function Nav({ openNav, onCloseNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      setAccountName({
+        displayName: userData.name || 'Guest',
+        email: userData.email || 'demo@minimals.cc',
+        photoURL: userData.avatarUrl || '/assets/images/avatars/avatar_default.jpg',
+      });
+    } else {
+      // If user data not found, reset to default account data
+      setAccountName({ ...account });
+    }
+  }, [openNav]);
   const renderContent = (
     <Scrollbar
       sx={{
@@ -60,15 +73,15 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={userAccount.photoURL} alt="photoURL" />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {userAccount.displayName}
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                {userAccount.role}
               </Typography>
             </Box>
           </StyledAccount>
