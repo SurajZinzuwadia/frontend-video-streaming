@@ -23,10 +23,6 @@ pipeline
                     if (imagesToDelete) {
                         sh "docker rmi -f ${imagesToDelete}"
                     }
-                    sh 'rm -rf /tmp/*'
-                    sh 'yes | docker system prune -a'
-                    sh 'rm -rf /var/lib/jenkins/workspace/video-streaming-platform'
-                    sh 'rm -rf /var/lib/jenkins/workspace/video-streaming-platform@tmp'
                 }
             }
         }
