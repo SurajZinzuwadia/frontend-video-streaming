@@ -6,6 +6,7 @@ import SimpleLayout from './layouts/simple';
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
@@ -29,12 +30,15 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
         { path: 'testing', element: <TestingPage /> },
         { path: 'highlights', element: <HighlightPage /> },
-
       ],
     },
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'signup',
+      element: <SignUpPage />,
     },
     {
       element: <SimpleLayout />,
