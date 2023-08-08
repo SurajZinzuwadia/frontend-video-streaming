@@ -21,6 +21,7 @@ function connectToServer() {
     let socket;
     if(!bConnected)
     {
+    bConnected = true;
     console.log("Join Live button clicked!");
     // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
 
@@ -35,8 +36,10 @@ function connectToServer() {
     myPeer.on('open', id => {
         socket.emit('JoinLive', ROOM_ID, id);
         socket.on('user-disconnected', id => {
+            console.log("User Disconneted received")
                 if(ROOM_ID == id)
                 {
+                    console.log("Producer User Disconneted")
                     if(callSocket)callSocket.close();
                     if(socket)socket.emit('disconnect')
                     window.location.href = "https://www.surajzinzuwadia.com";

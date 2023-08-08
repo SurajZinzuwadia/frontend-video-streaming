@@ -13,7 +13,6 @@ pipeline
         stage('Cleanup') {
             steps {
                 script {
-                    sh 'rm -rf video-streaming-platform video-streaming-platform@tmp'
                     def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
                     if (runningContainers) {
                         sh "docker stop ${runningContainers}"
@@ -24,6 +23,9 @@ pipeline
                     if (imagesToDelete) {
                         sh "docker rmi -f ${imagesToDelete}"
                     }
+                    sh 'rm -rf /tmp/*'
+                    sh 'docker system prune -a'
+                    sh 'rm -rf /var/lib/jenkins/workspace/video-streaming-platform /var/lib/jenkins/workspac/video-streaming-platform\@tmp/'
                 }
             }
         }
