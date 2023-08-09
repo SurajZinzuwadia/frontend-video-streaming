@@ -1,6 +1,6 @@
 
   let bLive = false;
-
+  let socket = null;
   var videoElement = document.createElement("video");
   videoElement.setAttribute("autoplay", "");
   videoElement.setAttribute("playsinline", "");
@@ -82,14 +82,16 @@
   let myPeer = null;
   function endLive()
   {
-
+  
    let keys = Object.keys(peers)
    for(var i =0; i < keys.length; i++)
    {
     if (peers[keys[i]]) peers[keys[i]].close()
    }
    if(socket)
+   {
     socket.emit('disconnect')
+   }
   
   window.location.href = `https://www.surajzinzuwadia.com/api/users/${ROOM_ID}/disable-live`;
   
@@ -99,7 +101,7 @@
       console.log("Go Live button clicked!");
       // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
       //open coonection to Live server
-      const socket = io('https://surajzinzuwadia.com:8001/')
+      socket = io('https://surajzinzuwadia.com:8001/')
       //open coonection to peer server
       myPeer = new Peer(undefined, {
           host: 'surajzinzuwadia.com',
