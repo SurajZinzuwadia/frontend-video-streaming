@@ -18,7 +18,7 @@ COPY package*.json ./backend/
 WORKDIR /app/backend
 # Install application dependencies
 RUN npm install
-RUN npm install peerjs
+RUN npm install peerjs@1.3.2
 RUN npm install nodemon
 RUN npm install fs
 RUN npm install https
