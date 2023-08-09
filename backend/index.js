@@ -77,7 +77,7 @@ app.get('/j/:room', (req, res) => {
 });
 
 app.get('/group/:room', (req, res) => {
-  res.render('room', { roomId: req.params.room });
+  res.render('group', { roomId: req.params.room });
 });
 
 io.on('connection', socket => {
