@@ -1,6 +1,17 @@
 const socket = io('https://surajzinzuwadia.com:8001/')
 // socket.emit('join-room', ROOM_ID, 10)
 
+const connectButton = document.getElementById("connectButton");
+connectButton.textContent = "End Call";
+connectButton.style.padding = "10px";
+connectButton.style.margin = "5px";
+connectButton.style.backgroundColor = "#4caf50"; 
+connectButton.style.color = "#ffffff";
+connectButton.style.border = "none";
+connectButton.style.borderRadius = "4px"; 
+
+document.body.appendChild(connectButton);
+
 bSocketConnected = false;
 bPeerConected = false;
 let thisId = 1
@@ -82,3 +93,8 @@ function addVideoStream(video, stream, userId) {
   })
   videoGrid.append(video)
 }
+
+// connectToServer();
+connectButton.addEventListener("click", () => {
+  window.location.href = "https://www.surajzinzuwadia.com";
+});
