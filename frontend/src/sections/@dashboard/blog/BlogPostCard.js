@@ -152,6 +152,12 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
     const url = `${apiSocketUrl}/j/${user._id}`;
     window.open(url, "_blank");
   };
+
+  const handleGroupStreaming = () => {
+    // setIsStreaming(true);
+    const url = `${apiSocketUrl}/group/${user._id}`;
+    window.open(url, "_blank");
+  };
   const handleHightStreaming = () => {
     setIsStreaming(true);
 
@@ -374,8 +380,10 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
                     </Button>
                   )}
                   <Button 
-                    onClick={btnFor === 'h' ? handleHightStreaming: handleStartStreaming} variant="contained" color="primary">
-                      {btnFor === 'h' ? 'Watch Highlight': 'Watch Live'}
+                    onClick={btnFor === 'h' ? handleHightStreaming : (btnFor === 'v' ? handleGroupStreaming : handleStartStreaming)}
+                    variant="contained" color="primary"
+                  >
+                    {btnFor === 'h' ? 'Watch Highlight' : (btnFor === 'v' ? 'Join Live' : 'Watch Live')}
                   </Button>
                 </StyledInfo>
               </CardContent>

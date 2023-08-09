@@ -13,10 +13,10 @@ pipeline
         stage('Cleanup') {
             steps {
                 script {
-                    def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
-                    if (runningContainers) {
-                        sh "docker stop ${runningContainers}"
-                        sh "docker rm ${runningContainers}"
+                    def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim().split('\n')
+                    for (def containerId in runningContainers) {
+                        sh "docker stop ${containerId}"
+                        sh "docker rm ${containerId}"
                     }
 
                     def imagesToDelete = sh(script: 'docker images -q', returnStdout: true).trim()

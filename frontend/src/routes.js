@@ -13,6 +13,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import TestingPage from './pages/TestingPage';
 import HighlightPage from './pages/HighlightPage';
 import ChannelPage from './pages/ChannelPage';
+import VideoChatPage from './pages/VideoChatPage';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function Router() {
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
         { path: 'testing', element: <TestingPage /> },
+        { path: 'chat', element: <VideoChatPage /> },
         { path: 'highlights', element: <HighlightPage /> },
       ],
     },

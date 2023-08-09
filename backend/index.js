@@ -49,6 +49,15 @@ const peerServer = PeerServer({ port: 3002,
       // passphrase: 'dexter'
     }
 });
+
+const groupServer = PeerServer({ port: 3003, 
+  path: '/' ,
+  ssl: {
+      key: privateKey,
+      cert: certificate,
+      // passphrase: 'dexter'
+    }
+});
 // const peerServer = PeerServer({ port: 3002, path: '/' });
 
 app.set('view engine', 'ejs');
@@ -67,7 +76,7 @@ app.get('/j/:room', (req, res) => {
   res.render('indexC', { roomId: req.params.room });
 });
 
-app.get('/join/:room', (req, res) => {
+app.get('/group/:room', (req, res) => {
   res.render('room', { roomId: req.params.room });
 });
 

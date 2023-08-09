@@ -28,6 +28,11 @@ const navConfig = [
     icon: icon('ic_lock'),
   },
   {
+    title: 'Video Chat',
+    path: '/dashboard/chat',
+    icon: icon('ic_lock'),
+  },
+  {
     title: 'Watch Highlights',
     path: '/dashboard/highlights',
     icon: icon('ic_lock'),
