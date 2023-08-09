@@ -42,7 +42,6 @@ export default function AccountPopover() {
   const handleLogOut = async () => {
     setOpen(null);
       try {
-      const response = await axios.put(`${apiBaseUrl}/api/users/${userAccount._id}`, {isLive :false});
       // Make an API call to log out the user
       await axios.post(`${apiBaseUrl}/api/logout`);
       // Remove the user data from local storage upon logout (optional)
