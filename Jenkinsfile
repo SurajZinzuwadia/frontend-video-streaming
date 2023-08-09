@@ -14,7 +14,7 @@ pipeline
             steps {
                 script {
                     sh("""
-                        chmode +x cleanup.sh
+                        chmod +x cleanup.sh
                         ./cleanup.sh
                     """)
                 }
