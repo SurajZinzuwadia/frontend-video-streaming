@@ -129,7 +129,6 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
         const data = await response.json();
         setSingleUser(data.user);
         const isUserSubscribed = loggedUser.subscribed.includes(user?._id);
-        console.log(isUserSubscribed)
         setIsSubscribed(isUserSubscribed);
       } catch (error) {
         console.error('Fetch user error:', error);
@@ -149,7 +148,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
   const navigate = useNavigate();
 
   const handleStartStreaming = () => {
-    setIsStreaming(true);
+    // setIsStreaming(true);
     const url = `${apiSocketUrl}/j/${user._id}`;
     window.open(url, "_blank");
   };

@@ -172,6 +172,26 @@ export default function TestingPage() {
     }
     console.log(videoRef)
   }, [stream]);
+  useEffect(() => {
+    // Fetch user data and update isLive status every 15 seconds
+    const fetchLiveStatus = async () => {
+      try {
+        const response = await axios.get(`${apiBaseUrl}/api/users`);
+        const liveUsers = response.data.filter(user => user.isLive);
+        setUsers(liveUsers);
+        console.log(liveUsers)
+      } catch (error) {
+        console.error('Error fetching live users:', error);
+      }
+    };
+
+    // Fetch live status immediately and start the interval
+    fetchLiveStatus();
+    const intervalId = setInterval(fetchLiveStatus, 5000); // 5000 ms = 5 seconds
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <>

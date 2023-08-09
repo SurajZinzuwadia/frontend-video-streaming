@@ -91,7 +91,7 @@
    if(socket)
     socket.emit('disconnect')
   
-  window.location.href = "https://www.surajzinzuwadia.com";
+  window.location.href = `https://www.surajzinzuwadia.com/api/users/${ROOM_ID}/disable-live`;
   
   }
   // Function for "Go Live" button

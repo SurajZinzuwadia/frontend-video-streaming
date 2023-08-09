@@ -306,6 +306,27 @@ app.put("/api/users/:id", requireAuth, async (req, res) => {
   }
 });
 
+app.get("/api/users/:id/disable-live", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update the isLive flag to false
+    user.isLive = false;
+    await user.save();
+
+    // Redirect to another website
+    res.redirect('https://www.surajzinzuwadia.com');
+  } catch (error) {
+    console.error("Disable isLive flag error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.post('/api/subscriptions/:userId', async (req, res) => {
   try {
