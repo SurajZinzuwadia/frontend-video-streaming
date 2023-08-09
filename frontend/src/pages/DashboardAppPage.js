@@ -49,7 +49,7 @@ export default function DashboardAppPage() {
       axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`)
         .then(response => {
           setUser(response.data);
-          console.log(user);
+          console.log(user)
         })
         .catch(error => {
           console.error("Error fetching user details:", error);
@@ -70,15 +70,15 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Videos" total={1352831} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="Total Videos" total={0} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            {/* <AppWidgetSummary title="Total Users" total={user?.subscriber?.length} color="info" icon={'ant-design:apple-filled'} /> */}
           </Grid>
  
            <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Channels" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+            {/* <AppWidgetSummary title="Total Channels" total={user?.subscribed?.length} color="warning" icon={'ant-design:windows-filled'} /> */}
           </Grid> 
 
           {/* <Grid item xs={12} sm={6} md={3}>

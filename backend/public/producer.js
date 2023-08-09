@@ -99,10 +99,10 @@
       console.log("Go Live button clicked!");
       // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
       //open coonection to Live server
-      const socket = io('https://www.surajzinzuwadia.com:8001/')
+      const socket = io('https://surajzinzuwadia.com:8001/')
       //open coonection to peer server
       myPeer = new Peer(undefined, {
-          host: 'www.surajzinzuwadia.com',
+          host: 'surajzinzuwadia.com',
           port: '3002',
           secure: true
           })
