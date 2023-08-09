@@ -57,7 +57,7 @@ socket.on('user-disconnected', userId => {
 socket.on('connect', ()=>{
   bSocketConnected = true;
   if(bPeerConected){
-    socket.emit('join-room', ROOM_ID, id)
+    socket.emit('join-room', ROOM_ID, thisId)
   }
 })
 myPeer.on('open', id => {
