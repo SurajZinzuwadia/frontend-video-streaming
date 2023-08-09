@@ -38,6 +38,9 @@ export default function AccountPopover() {
   
   const handleClose = async () => {
     setOpen(null);
+  };
+  const handleLogOut = async () => {
+    setOpen(null);
       try {
       // Make an API call to log out the user
       await axios.post(`${apiBaseUrl}/api/logout`);
@@ -48,7 +51,7 @@ export default function AccountPopover() {
       } catch (error) {
         console.error('Logout error:', error);
       }
-  };
+  }
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -126,7 +129,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>

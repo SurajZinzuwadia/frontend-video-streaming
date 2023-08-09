@@ -1,5 +1,9 @@
 import { Helmet } from 'react-helmet-async';
+import React, { useState, useEffect, useRef } from 'react';
+
 import { faker } from '@faker-js/faker';
+import axios from 'axios';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -22,6 +26,36 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+  const [user, setUser] = useState(null);
+  const loggedUser = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    // const fetchUsers = async () => {
+    //   try {
+    //     if(loggedUser)
+    //     {
+    //       const response = await axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`);
+    //       setUser(response.data);
+    //       console.log(user)
+
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching users:', error);
+    //   }
+    // };
+    // fetchUsers();
+    if (loggedUser) {
+      axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`)
+        .then(response => {
+          setUser(response.data);
+          console.log(user);
+        })
+        .catch(error => {
+          console.error("Error fetching user details:", error);
+        });
+    }
+  }, []);
 
   return (
     <>
@@ -36,20 +70,20 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="Total Videos" total={1352831} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="Total Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
+ 
+           <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary title="Total Channels" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+          </Grid> 
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
+          </Grid>  */}
 
           {/* <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
@@ -91,7 +125,7 @@ export default function DashboardAppPage() {
             />
           </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title="Current Visits"
               chartData={[
@@ -107,7 +141,7 @@ export default function DashboardAppPage() {
                 theme.palette.error.main,
               ]}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
@@ -153,7 +187,7 @@ export default function DashboardAppPage() {
               }))}
             />
           </Grid> */}
-
+{/* 
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"
@@ -170,9 +204,9 @@ export default function DashboardAppPage() {
                 time: faker.date.past(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite
               title="Traffic by Site"
               list={[
@@ -198,7 +232,7 @@ export default function DashboardAppPage() {
                 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={8}>
             <AppTasks
