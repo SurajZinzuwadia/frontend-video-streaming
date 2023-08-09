@@ -383,7 +383,7 @@ export default function BlogPostCard({ user, index, btnFor, videosrc }) {
                     onClick={btnFor === 'h' ? handleHightStreaming : (btnFor === 'v' ? handleGroupStreaming : handleStartStreaming)}
                     variant="contained" color="primary"
                   >
-                    {btnFor === 'h' ? 'Watch Highlight' : (btnFor === 'v' ? 'Join Live' : 'Watch Live')}
+                    {btnFor === 'h' ? 'Watch Highlight' : (btnFor === 'v' ? 'Join Room' : 'Watch Live')}
                   </Button>
                 </StyledInfo>
               </CardContent>
