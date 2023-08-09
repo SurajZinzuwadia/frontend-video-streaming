@@ -54,6 +54,9 @@ function connectToServer() {
         const video = document.createElement('video')
         call.on('stream', liveStream => {
             videoElement.srcObject = liveStream;
+            videoElement.addEventListener('loadedmetadata', () => {
+                video.play();
+              });
         })
     })
     } else { // disconnected clicked by consumer
