@@ -90,6 +90,16 @@ io.on('connection', socket => {
     });
   });
 
+  socket.on('join-room', (roomId, userId) => {
+      console.log('user connected :',roomId, userId);
+    socket.join(roomId)
+    socket.to(roomId).broadcast.emit('user-connected', userId)
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).broadcast.emit('user-disconnected', userId)
+    })
+  })
+
   socket.on('JoinLive', (roomId, userId) => {
     console.log('Live user connected:', roomId, userId);
     socket.join(roomId);
