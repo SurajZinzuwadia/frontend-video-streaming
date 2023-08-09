@@ -1,7 +1,7 @@
 const socket = io('https://surajzinzuwadia.com:8001/')
 // socket.emit('join-room', ROOM_ID, 10)
 
-const connectButton = document.getElementById("connectButton");
+const connectButton = document.createElement('button');
 connectButton.textContent = "End Call";
 connectButton.style.padding = "10px";
 connectButton.style.margin = "5px";
