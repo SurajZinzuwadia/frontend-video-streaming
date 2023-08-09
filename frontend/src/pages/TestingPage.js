@@ -43,7 +43,7 @@ export default function TestingPage() {
       }
     
     // const url = `${apiBaseUrl}/backend`;
-    const url = `https://3.210.49.37:8001/${loggedUser._id}`;
+    const url = `https://surajzinzuwadia.com:8001/${loggedUser._id}`;
 
     window.open(url, "_blank");  };
 

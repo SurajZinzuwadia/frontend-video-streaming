@@ -67,18 +67,17 @@ export default function DashboardAppPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>
-
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Total Videos" total={0} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="Total Videos" total={5} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            {/* <AppWidgetSummary title="Total Users" total={user?.subscriber?.length} color="info" icon={'ant-design:apple-filled'} /> */}
+            <AppWidgetSummary title="Total Users" total={1000} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
  
            <Grid item xs={12} sm={6} md={3}>
-            {/* <AppWidgetSummary title="Total Channels" total={user?.subscribed?.length} color="warning" icon={'ant-design:windows-filled'} /> */}
+            <AppWidgetSummary title="Total Channels" total={2000} color="warning" icon={'ant-design:windows-filled'} />
           </Grid> 
 
           {/* <Grid item xs={12} sm={6} md={3}>
@@ -203,34 +202,6 @@ export default function DashboardAppPage() {
                 type: `order${index + 1}`,
                 time: faker.date.past(),
               }))}
-            />
-          </Grid> */}
-
-          {/* <Grid item xs={12} md={6} lg={4}>
-            <AppTrafficBySite
-              title="Traffic by Site"
-              list={[
-                {
-                  name: 'FaceBook',
-                  value: 323234,
-                  icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} />,
-                },
-                {
-                  name: 'Google',
-                  value: 341212,
-                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />,
-                },
-                {
-                  name: 'Linkedin',
-                  value: 411213,
-                  icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} />,
-                },
-                {
-                  name: 'Twitter',
-                  value: 443232,
-                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />,
-                },
-              ]}
             />
           </Grid> */}
 
