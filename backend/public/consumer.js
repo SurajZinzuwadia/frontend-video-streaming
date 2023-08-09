@@ -26,10 +26,10 @@ function connectToServer() {
     // const serverUrl = process.env.SERVER_URL || 'http://localhost:8000'; // Replace 'http://localhost:8000' with your actual server URL
 
     //open conection to Live server
-    socket = io('3.210.49.37:8001/')
+    socket = io('https://www.surajzinzuwadia.com:8001/')
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
-        host: '3.210.49.37',
+        host: 'www.surajzinzuwadia.com',
         port: '3002',
         secure: true
         })

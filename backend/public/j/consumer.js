@@ -19,10 +19,10 @@ videoElement.style.width = "100%";
 function connectToServer() {
     console.log("Join Live button clicked!");
     //open coonection to Live server
-    const socket = io('3.210.49.37:8001/')
+    const socket = io('https://www.surajzinzuwadia.com:8001/')
     //open coonection to peer server
     const myPeer = new Peer(undefined, {
-        host: '3.210.49.37',
+        host: 'www.surajzinzuwadia.com',
         port: '3002',
         secure: true
         })
