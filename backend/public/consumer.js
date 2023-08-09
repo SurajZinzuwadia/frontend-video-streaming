@@ -1,7 +1,7 @@
 const connectButton = document.getElementById("connectButton");
 const videoElement = document.getElementById("videoElement");
 
-connectButton.textContent = "Join Live";
+connectButton.textContent = "Join Stream";
 connectButton.style.padding = "10px";
 connectButton.style.margin = "5px";
 connectButton.style.backgroundColor = "#4caf50"; 
@@ -66,7 +66,7 @@ function connectToServer() {
 }
 // connectToServer();
 connectButton.addEventListener("click", () => {
-    if(bConnected){
+    if(!bConnected){
         connectButton.textContent = "End Stream";      
     }else{
         connectButton.textContent = "Join Stream";      
