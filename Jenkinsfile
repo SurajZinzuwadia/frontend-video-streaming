@@ -23,8 +23,8 @@ pipeline
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
-                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:frontend'
+                    sh 'docker build -t krishnap1999/video-streaming-platform:frontend -f Dockerfile .'
+                    // sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:frontend'
                 }
             }
         }
@@ -32,8 +32,8 @@ pipeline
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
-                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:backend'
+                    sh 'docker build -t krishnap1999/video-streaming-platform:backend -f Dockerfile .'
+                    // sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:backend'
                 }
             }
         }
@@ -41,8 +41,8 @@ pipeline
         stage('Build database') {
             steps {
                 dir('database') {
-                    sh 'docker build -t krishnap1999/video-streaming-platform:latest .'
-                    sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:database'
+                    sh 'docker build -t krishnap1999/video-streaming-platform:database -f Dockerfile .'
+                    // sh 'docker tag krishnap1999/video-streaming-platform:latest krishnap1999/video-streaming-platform:database'
                 }
             }
         }
