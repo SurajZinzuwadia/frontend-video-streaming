@@ -44,15 +44,15 @@ export default function SignupForm() {
   const handleSignup = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-
-      if (password !== correctPassword) { // Check if passwords match
-        toast.error("Passwords do not match", {
+      if (password !== correctPassword) {
+        // Check if passwords match
+        toast.error('Passwords do not match', {
           position: toast.POSITION.BOTTOM_CENTER,
         }); // Show error toast
         return;
       }
 
-      const response = await axios.post(`${apiBaseUrl}/api/signup`, { name, email, password });
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, { name, email, password });
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));

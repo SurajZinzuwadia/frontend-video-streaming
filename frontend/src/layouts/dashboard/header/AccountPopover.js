@@ -5,7 +5,7 @@ import axios from 'axios';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
-import account, {updateAccountData} from '../../../_mock/account';
+import account, { updateAccountData } from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
 
@@ -35,23 +35,22 @@ export default function AccountPopover() {
     setOpen(event.currentTarget);
   };
 
-  
   const handleClose = async () => {
     setOpen(null);
   };
   const handleLogOut = async () => {
     setOpen(null);
-      try {
+    try {
       // Make an API call to log out the user
-      await axios.post(`${apiBaseUrl}/api/logout`);
+      await axios.post(`${apiBaseUrl}/api/auth/logout`);
       // Remove the user data from local storage upon logout (optional)
-      localStorage.removeItem("user");
+      localStorage.removeItem('user');
       // Redirect the user to the login page after successful logout
-      window.location.href = "/login";
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
-  }
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));

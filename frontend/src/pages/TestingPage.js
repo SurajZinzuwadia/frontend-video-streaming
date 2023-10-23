@@ -4,7 +4,17 @@ import axios from 'axios';
 import Peer from 'peerjs';
 import { v4 as uuidv4 } from 'uuid';
 import React, { useState, useEffect, useRef } from 'react';
-import { Grid, Button, Container, Stack, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+  Grid,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 
 // Components
 import Iconify from '../components/iconify';
@@ -35,17 +45,17 @@ export default function TestingPage() {
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const handleOpenModal = async () => {
+    try {
+      const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, { isLive: true });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
 
-      try {
-        const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, {isLive :true});
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    
     // const url = `${apiBaseUrl}/backend`;
     const url = `https://surajzinzuwadia.com:8001/${loggedUser._id}`;
 
-    window.open(url, "_blank");  };
+    window.open(url, '_blank');
+  };
 
   const handleCloseModal = () => {
     // Stop the media stream when the modal is closed
@@ -75,28 +85,28 @@ export default function TestingPage() {
       const myPeer = new Peer(undefined, {
         host: '3.210.49.37',
         port: '3002',
-        secure: true
+        secure: true,
       });
       myPeer.on('open', (id) => {
         const ROOM_ID = uuidv4(); // Generate ROOM_ID
-      console.log('WebSocket connection established:', socket.connected); // Add this line
+        console.log('WebSocket connection established:', socket.connected); // Add this line
 
         socket.emit('GoLive', ROOM_ID, id);
       });
       setMyPeer(myPeer);
 
-      myPeer.on('call', call => {
+      myPeer.on('call', (call) => {
         console.log('streaming Live!!');
         call.answer(stream);
       });
 
-      socket.on('user-connected', userId => {
+      socket.on('user-connected', (userId) => {
         console.log('User Connected!!', userId);
 
         connectToNewUser(userId, stream);
       });
 
-      socket.on('user-disconnected', userId => {
+      socket.on('user-disconnected', (userId) => {
         if (peers[userId]) peers[userId].close();
       });
     } catch (error) {
@@ -109,7 +119,7 @@ export default function TestingPage() {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
-  
+
       // Close peer connections and other cleanup tasks
       if (myPeer) {
         myPeer.destroy();
@@ -119,20 +129,19 @@ export default function TestingPage() {
       setPeers({});
     }
   };
-  
 
   const connectToNewUser = (userId, stream) => {
     const call = myPeer.call(userId, stream);
     const video = document.createElement('video');
-    call.on('stream', userVideoStream => {
+    call.on('stream', (userVideoStream) => {
       addVideoStream(video, userVideoStream);
     });
     call.on('close', () => {
       video.remove();
     });
-    setPeers(prevPeers => ({
+    setPeers((prevPeers) => ({
       ...prevPeers,
-      [userId]: call
+      [userId]: call,
     }));
   };
 
@@ -147,7 +156,7 @@ export default function TestingPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/users`);
+        const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -157,7 +166,7 @@ export default function TestingPage() {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(`${apiBaseUrl}/api/videos`);
-        console.log(response.data)
+        console.log(response.data);
         setVideos(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -170,16 +179,16 @@ export default function TestingPage() {
     if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
     }
-    console.log(videoRef)
+    console.log(videoRef);
   }, [stream]);
   useEffect(() => {
     // Fetch user data and update isLive status every 15 seconds
     const fetchLiveStatus = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/users`);
-        const liveUsers = response.data.filter(user => user.isLive);
+        const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
+        const liveUsers = response.data.filter((user) => user.isLive);
         setUsers(liveUsers);
-        console.log(liveUsers)
+        console.log(liveUsers);
       } catch (error) {
         console.error('Error fetching live users:', error);
       }
@@ -197,7 +206,6 @@ export default function TestingPage() {
     <>
       <Helmet>
         <title> Dashboard: Blog | Minimal UI </title>
-
       </Helmet>
 
       <Container>
@@ -214,10 +222,10 @@ export default function TestingPage() {
             <DialogTitle>Preview</DialogTitle>
             <DialogContent>
               {stream ? (
-                 <video ref={videoRef} width="100%" autoPlay playsInline>
-                 <track kind="captions" srcLang="en" label="English Captions" />
-               </video>
-            ) : (
+                <video ref={videoRef} width="100%" autoPlay playsInline>
+                  <track kind="captions" srcLang="en" label="English Captions" />
+                </video>
+              ) : (
                 <Typography variant="body1">Camera access not available.</Typography>
               )}
             </DialogContent>
@@ -244,12 +252,12 @@ export default function TestingPage() {
         </Stack>
 
         <Grid container spacing={3}>
-          {users.filter(user=>user.isLive).map((user, index) => (
-            <BlogPostCard key={user._id} user={user} index={index} />
-          ))}
- 
+          {users
+            .filter((user) => user.isLive)
+            .map((user, index) => (
+              <BlogPostCard key={user._id} user={user} index={index} />
+            ))}
         </Grid>
-        
       </Container>
     </>
   );

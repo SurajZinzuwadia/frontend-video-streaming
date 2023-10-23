@@ -74,7 +74,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
-
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [open, setOpen] = useState(null);
@@ -149,9 +148,9 @@ export default function UserPage() {
     try {
       const userData = JSON.parse(localStorage.getItem('user'));
 
-    // Check if user data exists and contains a valid token
-    
-      const response = await axios.get(`${apiBaseUrl}/api/subscribers/${userData._id}`);
+      // Check if user data exists and contains a valid token
+
+      const response = await axios.get(`${apiBaseUrl}/api/users/subscribers/${userData._id}`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -161,7 +160,7 @@ export default function UserPage() {
   useEffect(() => {
     // Fetch users when the component mounts
     fetchUsers();
-  }, []); 
+  }, []);
 
   const dbUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
 
