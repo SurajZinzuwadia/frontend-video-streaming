@@ -1,19 +1,14 @@
+import { useEffect, React } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 
-// @mui
 import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
-// hooks
+
 import useResponsive from '../hooks/useResponsive';
-// components
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
-// sections
 import { LoginForm } from '../sections/auth/login';
-
-// ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -41,27 +36,24 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-// ----------------------------------------------------------------------
-
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
   const navigate = useNavigate();
 
   const handleSignUp = () => {
     navigate('/signup');
-
-  }
+  };
 
   useEffect(() => {
     localStorage.clear(); // Clear localStorage
     sessionStorage.clear(); // Clear sessionStorage
   }, []);
+
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Sign In | Stream Sonic </title>
       </Helmet>
-
       <StyledRoot>
         <Logo
           sx={{
@@ -88,10 +80,7 @@ export default function LoginPage() {
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link
-                variant="subtitle2"
-                onClick={handleSignUp}
-              >
+              <Link variant="subtitle2" onClick={handleSignUp}>
                 Get started
               </Link>
             </Typography>
@@ -115,7 +104,6 @@ export default function LoginPage() {
                 OR
               </Typography>
             </Divider>
-
             <LoginForm />
           </StyledContent>
         </Container>

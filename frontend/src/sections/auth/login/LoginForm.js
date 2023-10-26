@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -19,17 +18,18 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // eslint-disable-next-line
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/login`, { email, password });
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, { email, password });
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
+
         // Display "Login successful" toast
         toast.success('Login successful!', {
           position: toast.POSITION.BOTTOM_CENTER,

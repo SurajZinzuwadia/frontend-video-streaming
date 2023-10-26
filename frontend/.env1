@@ -1,2 +1,5 @@
-REACT_APP_API_BASE_URL=http://3.210.49.37:3001
-REACT_APP_API_SOCKET_URL=https://3.210.49.37:8000
+# REACT_APP_API_BASE_URL=https://www.surajzinzuwadia.com
+
+REACT_APP_API_BASE_URL=http://localhost:3001
+
+REACT_APP_API_SOCKET_URL=https://surajzinzuwadia.com:8001

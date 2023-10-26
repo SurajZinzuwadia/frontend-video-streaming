@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 import account from '../../../_mock/account';
 // hooks
@@ -14,7 +14,6 @@ import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
-
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -36,9 +35,8 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
-  const [userAccount, setAccountName] = useState({...account});
+  const [userAccount, setAccountName] = useState({ ...account });
   const isDesktop = useResponsive('up', 'lg');
-
   useEffect(() => {
     if (openNav) {
       onCloseNav();
@@ -59,6 +57,7 @@ export default function Nav({ openNav, onCloseNav }) {
       setAccountName({ ...account });
     }
   }, [openNav]);
+
   const renderContent = (
     <Scrollbar
       sx={{

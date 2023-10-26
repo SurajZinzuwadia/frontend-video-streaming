@@ -12,7 +12,6 @@ import {
   Stack,
   Paper,
   Avatar,
-  Button,
   Popover,
   Checkbox,
   TableRow,
@@ -76,11 +75,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function ChanelPage() {
-
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const navigate = useNavigate();
-
 
   const [open, setOpen] = useState(null);
 
@@ -97,7 +94,6 @@ export default function ChanelPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [users, setUsers] = useState([]); // State to store the list of users
-
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -123,8 +119,8 @@ export default function ChanelPage() {
   };
 
   const handleChannel = (id) => {
-    navigate(`/dashboard/channel/${id}`)
-  }
+    navigate(`/dashboard/channel/${id}`);
+  };
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -159,9 +155,9 @@ export default function ChanelPage() {
     try {
       const userData = JSON.parse(localStorage.getItem('user'));
 
-    // Check if user data exists and contains a valid token
-    
-      const response = await axios.get(`${apiBaseUrl}/api/channels/${userData._id}`);
+      // Check if user data exists and contains a valid token
+
+      const response = await axios.get(`${apiBaseUrl}/api/users/channels/${userData._id}`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -171,7 +167,8 @@ export default function ChanelPage() {
   useEffect(() => {
     // Fetch users when the component mounts
     fetchUsers();
-  }, []); 
+    // eslint-disable-next-line
+  }, []);
 
   const dbUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
 
@@ -184,7 +181,7 @@ export default function ChanelPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> User | Stream Sonic </title>
       </Helmet>
 
       <Container>
@@ -231,7 +228,8 @@ export default function ChanelPage() {
                           sx={{
                             cursor: 'pointer', // Show pointer cursor on hover
                           }}
-                          onClick={() => handleChannel(_id)}>
+                          onClick={() => handleChannel(_id)}
+                        >
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
@@ -240,13 +238,15 @@ export default function ChanelPage() {
                           </Stack>
                         </TableCell>
 
-                        <TableCell 
+                        <TableCell
                           align="left"
                           sx={{
                             cursor: 'pointer', // Show pointer cursor on hover
                           }}
-                          onClick={() => handleChannel(_id)}  
-                        >{email}</TableCell>
+                          onClick={() => handleChannel(_id)}
+                        >
+                          {email}
+                        </TableCell>
 
                         {/* <TableCell align="left">{password}</TableCell> */}
 
@@ -256,9 +256,11 @@ export default function ChanelPage() {
                             cursor: 'pointer', // Show pointer cursor on hover
                           }}
                           onClick={() => handleChannel(_id)}
-                        >{isVerified ? 'Yes' : 'No'}</TableCell>
+                        >
+                          {isVerified ? 'Yes' : 'No'}
+                        </TableCell>
 
-                        <TableCell 
+                        <TableCell
                           align="left"
                           sx={{
                             cursor: 'pointer', // Show pointer cursor on hover
@@ -341,8 +343,7 @@ export default function ChanelPage() {
         }}
       >
         <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} 
-          />
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           View
         </MenuItem>
 

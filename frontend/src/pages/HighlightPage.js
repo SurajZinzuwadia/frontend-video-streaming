@@ -1,25 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
-import io from 'socket.io-client';
 import axios from 'axios';
-import Peer from 'peerjs';
-import { v4 as uuidv4 } from 'uuid';
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  Grid,
-  Button,
-  Container,
-  Stack,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Grid, Container, Stack, Typography } from '@mui/material';
 
 // Components
-import Iconify from '../components/iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 // Mock Data
 import POSTS from '../_mock/blog';
@@ -36,31 +22,27 @@ export default function TestingPage() {
 
   const [videos, setVideos] = useState([]);
   useEffect(() => {
-
     const fetchVideos = async () => {
       try {
         const response = await axios.get(`${apiBaseUrl}/api/videos`);
-        if(paramId){
-          const filteredVideos = response.data.filter(video => video.user._id === paramId);
+        if (paramId) {
+          const filteredVideos = response.data.filter((video) => video.user._id === paramId);
           setVideos(filteredVideos);
-        }
-        else {
+        } else {
           setVideos(response.data);
-
         }
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     };
     fetchVideos();
+    // eslint-disable-next-line
   }, []);
-
-
 
   return (
     <>
       <Helmet>
-        <title> Dashboard: Blog | Minimal UI </title>
+        <title> Dashboard: Blog | Stream Sonic </title>
       </Helmet>
 
       <Container>
