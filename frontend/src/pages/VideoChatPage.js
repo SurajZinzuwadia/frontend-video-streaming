@@ -32,34 +32,34 @@ export default function VideoChatPage() {
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [isStreaming, setIsStreaming] = useState(false);
-  const [videoChunks, setVideoChunks] = useState([]);
   const [users, setUsers] = useState([]);
+  // eslint-disable-next-line
   const [videos, setVideos] = useState([]);
 
   const videoRef = useRef(null);
-  const socketRef = useRef(null);
   const [openModal, setOpenModal] = useState(false);
   const [stream, setStream] = useState(null);
   const [myPeer, setMyPeer] = useState(null);
   const [peers, setPeers] = useState({});
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
-  const handleOpenModal = async () => {
-    try {
-      const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, { isLive: true });
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
+  // const handleOpenModal = async () => {
+  //   try {
+  //     const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, { isLive: true });
+  //   } catch (error) {
+  //     console.error('Error fetching users:', error);
+  //   }
 
-    // const url = `${apiBaseUrl}/backend`;
-    const url = `https://surajzinzuwadia.com:8001/${loggedUser._id}`;
+  //   // const url = `${apiBaseUrl}/backend`;
+  //   const url = `https://surajzinzuwadia.com:8001/${loggedUser._id}`;
 
-    window.open(url, '_blank');
-  };
+  //   window.open(url, '_blank');
+  // };
 
   const handleVideoModal = async () => {
     try {
       const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, { isLive: true });
+      console.log(response);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -166,26 +166,40 @@ export default function VideoChatPage() {
     videoRef.current.appendChild(video);
   };
 
+  // Fetch user data and update isLive status every 15 seconds
+  const fetchLiveStatus = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
+      const liveUsers = response.data.filter((user) => user.isLive);
+      setUsers(liveUsers);
+      console.log(liveUsers);
+    } catch (error) {
+      console.error('Error fetching live users:', error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/api/videos`);
+      console.log(response.data);
+      setVideos(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
-        setUsers(response.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
     fetchUsers();
-    const fetchVideos = async () => {
-      try {
-        const response = await axios.get(`${apiBaseUrl}/api/videos`);
-        console.log(response.data);
-        setVideos(response.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
     fetchVideos();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -195,24 +209,13 @@ export default function VideoChatPage() {
     console.log(videoRef);
   }, [stream]);
   useEffect(() => {
-    // Fetch user data and update isLive status every 15 seconds
-    const fetchLiveStatus = async () => {
-      try {
-        const response = await axios.get(`${apiBaseUrl}/api/users/list-users`);
-        const liveUsers = response.data.filter((user) => user.isLive);
-        setUsers(liveUsers);
-        console.log(liveUsers);
-      } catch (error) {
-        console.error('Error fetching live users:', error);
-      }
-    };
-
     // Fetch live status immediately and start the interval
     fetchLiveStatus();
     const intervalId = setInterval(fetchLiveStatus, 5000); // 5000 ms = 5 seconds
 
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line
   }, []);
 
   return (

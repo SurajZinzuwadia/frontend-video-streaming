@@ -5,7 +5,7 @@ import axios from 'axios';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
-import account, { updateAccountData } from '../../../_mock/account';
+import account from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ export default function AccountPopover() {
     setOpen(null);
     try {
       // Make an API call to log out the user
-      await axios.post(`${apiBaseUrl}/api/auth/logout`);
+      await axios.post(`${apiBaseUrl}/api/auth/signout`);
       // Remove the user data from local storage upon logout (optional)
       localStorage.removeItem('user');
       // Redirect the user to the login page after successful logout
@@ -127,10 +127,15 @@ export default function AccountPopover() {
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
-          Logout
-        </MenuItem>
+        {userAccount.displayName === 'Guest' ? (
+          <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
+            Sign In
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
+            Sign out
+          </MenuItem>
+        )}
       </Popover>
     </>
   );

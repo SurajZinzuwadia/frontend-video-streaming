@@ -32,12 +32,11 @@ export default function TestingPage() {
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const [isStreaming, setIsStreaming] = useState(false);
-  const [videoChunks, setVideoChunks] = useState([]);
   const [users, setUsers] = useState([]);
+  // eslint-disable-next-line
   const [videos, setVideos] = useState([]);
 
   const videoRef = useRef(null);
-  const socketRef = useRef(null);
   const [openModal, setOpenModal] = useState(false);
   const [stream, setStream] = useState(null);
   const [myPeer, setMyPeer] = useState(null);
@@ -47,6 +46,7 @@ export default function TestingPage() {
   const handleOpenModal = async () => {
     try {
       const response = await axios.put(`${apiBaseUrl}/api/users/${loggedUser._id}`, { isLive: true });
+      console.log(response);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -173,6 +173,7 @@ export default function TestingPage() {
       }
     };
     fetchVideos();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -200,12 +201,13 @@ export default function TestingPage() {
 
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line
   }, []);
 
   return (
     <>
       <Helmet>
-        <title> Dashboard: Blog | Minimal UI </title>
+        <title> Dashboard: Blog | Stream Sonic </title>
       </Helmet>
 
       <Container>

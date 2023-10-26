@@ -18,13 +18,14 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // eslint-disable-next-line
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/login`, { email, password });
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, { email, password });
       if (response.data.user) {
         // Store the user data in local storage
         localStorage.setItem('user', JSON.stringify(response.data.user));

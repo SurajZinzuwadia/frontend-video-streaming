@@ -1,8 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-// layouts
+
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
@@ -14,8 +13,6 @@ import TestingPage from './pages/TestingPage';
 import HighlightPage from './pages/HighlightPage';
 import ChannelPage from './pages/ChannelPage';
 import VideoChatPage from './pages/VideoChatPage';
-
-// ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
@@ -54,6 +51,10 @@ export default function Router() {
     {
       path: '*',
       element: <Navigate to="/404" replace />,
+    },
+    {
+      path: 'logout',
+      element: <LoginPage />,
     },
   ]);
 

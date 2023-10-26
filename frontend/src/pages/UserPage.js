@@ -160,6 +160,7 @@ export default function UserPage() {
   useEffect(() => {
     // Fetch users when the component mounts
     fetchUsers();
+    // eslint-disable-next-line
   }, []);
 
   const dbUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
@@ -173,7 +174,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> User | Stream Sonic </title>
       </Helmet>
 
       <Container>

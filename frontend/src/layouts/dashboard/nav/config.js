@@ -21,7 +21,6 @@ const navConfig = [
     path: '/dashboard/channel',
     icon: icon('ic_user'),
   },
- 
   {
     title: 'Live Streams',
     path: '/dashboard/testing',
@@ -38,16 +37,10 @@ const navConfig = [
     icon: icon('ic_lock'),
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
+    title: 'Not found',
+    path: '/404',
+    icon: icon('ic_disabled'),
   },
-  // Hide from the navbar
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: icon('ic_disabled'),
-  // },
 ];
 
 export default navConfig;

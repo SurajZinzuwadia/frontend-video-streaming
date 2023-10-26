@@ -1,66 +1,48 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useState, useEffect, useRef } from 'react';
-
-import { faker } from '@faker-js/faker';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// @mui
-import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
-// components
-import Iconify from '../components/iconify';
-// sections
 import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
+  // AppTasks,
+  // AppNewsUpdate,
+  // AppOrderTimeline,
+  // AppCurrentVisits,
+  // AppWebsiteVisits,
+  // AppTrafficBySite,
   AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
+  // AppCurrentSubject,
+  // AppConversionRates,
 } from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
-  const theme = useTheme();
   const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
   const [user, setUser] = useState(null);
   const loggedUser = JSON.parse(localStorage.getItem('user'));
-
-  useEffect(() => {
-    // const fetchUsers = async () => {
-    //   try {
-    //     if(loggedUser)
-    //     {
-    //       const response = await axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`);
-    //       setUser(response.data);
-    //       console.log(user)
-
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching users:', error);
-    //   }
-    // };
-    // fetchUsers();
-    if (loggedUser) {
-      axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`)
-        .then(response => {
-          setUser(response.data);
-          console.log(user)
-        })
-        .catch(error => {
-          console.error("Error fetching user details:", error);
-        });
+  // Define the function
+  const fetchUserDetails = async () => {
+    try {
+      if (loggedUser) {
+        const response = await axios.get(`${apiBaseUrl}/api/users/${loggedUser?._id}`);
+        setUser(response.data);
+        console.log(user);
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
     }
+  };
+  useEffect(() => {
+    // Call the function
+    fetchUserDetails();
+    // eslint-disable-next-line
   }, []);
 
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Dashboard | Stream Sonic </title>
       </Helmet>
 
       <Container maxWidth="xl">
@@ -75,10 +57,10 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Total Users" total={1000} color="info" icon={'ant-design:apple-filled'} />
           </Grid>
- 
-           <Grid item xs={12} sm={6} md={3}>
+
+          <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Total Channels" total={2000} color="warning" icon={'ant-design:windows-filled'} />
-          </Grid> 
+          </Grid>
 
           {/* <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
@@ -186,7 +168,7 @@ export default function DashboardAppPage() {
               }))}
             />
           </Grid> */}
-{/* 
+          {/* 
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"

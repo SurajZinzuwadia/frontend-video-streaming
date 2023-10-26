@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
+
 const signup = async (req, res) => {
   // Your signup logic here
   const { name, email, password } = req.body;
@@ -62,20 +63,15 @@ const getSessionData = (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     // Find the user with the provided email in the database
     const user = await User.findOne({ email });
 
-    // If no user with the provided email is found, return an error
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
     // Check if the provided password matches the user's password
-    if (user.password !== password) {
+    if (!user || user.password !== password) {
       return res.status(401).json({ error: "Email ID or Password is invalid" });
     }
     req.session.user = user;
@@ -89,7 +85,7 @@ const login = async (req, res) => {
   }
 };
 
-const logout = (req, res) => {
+const signout = (req, res) => {
   try {
     // Destroy the user session
     req.session.destroy((err) => {
@@ -105,6 +101,7 @@ const logout = (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -298,8 +295,8 @@ module.exports = {
   signup,
   getUsers,
   getSessionData,
-  login,
-  logout,
+  signin,
+  signout,
   deleteUser,
   getUserById,
   updateUser,

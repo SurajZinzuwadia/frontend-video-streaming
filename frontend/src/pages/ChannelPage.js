@@ -12,7 +12,6 @@ import {
   Stack,
   Paper,
   Avatar,
-  Button,
   Popover,
   Checkbox,
   TableRow,
@@ -168,6 +167,7 @@ export default function ChanelPage() {
   useEffect(() => {
     // Fetch users when the component mounts
     fetchUsers();
+    // eslint-disable-next-line
   }, []);
 
   const dbUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
@@ -181,7 +181,7 @@ export default function ChanelPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> User | Stream Sonic </title>
       </Helmet>
 
       <Container>
